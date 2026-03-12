@@ -1,0 +1,27 @@
+import { z } from "zod";
+
+export const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  company: z.string().optional(),
+  country: z.string().min(2, "Please enter your country"),
+  email: z.string().email("Please enter a valid email"),
+  phone: z.string().optional(),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+export const rfqSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  company: z.string().min(2, "Company name is required"),
+  country: z.string().min(2, "Please enter your country"),
+  email: z.string().email("Please enter a valid email"),
+  phone: z.string().optional(),
+  categories: z
+    .array(z.string())
+    .min(1, "Select at least one product category"),
+  quantity: z.string().min(1, "Please provide an estimated quantity"),
+  customization: z.enum(["yes", "no", "not-sure"]),
+  message: z.string().optional(),
+});
+
+export type ContactFormData = z.infer<typeof contactSchema>;
+export type RFQFormData = z.infer<typeof rfqSchema>;

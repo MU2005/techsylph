@@ -1,0 +1,323 @@
+---
+alwaysApply: false
+---
+
+# 🔍 TECHSYLPH — Full Code QA Audit Protocol
+
+You are acting as a senior Next.js engineer performing a structured QA audit
+of the TechSylph B2B apparel export website.
+
+Your job is to READ the codebase, check every item below, and produce a
+QA_REPORT.md file in the project root with your findings.
+
+Do NOT fix anything during this audit unless explicitly asked.
+Do NOT hallucinate issues — only report what you actually find in the code.
+
+---
+
+## ⚙️ STACK CONTEXT
+
+- Next.js 14 App Router + TypeScript strict
+- Tailwind CSS + shadcn/ui
+- Sanity v3 CMS (read client + write client)
+- Resend (email notifications)
+- next-intl (EN / FR / DE)
+- React Hook Form + Zod validation
+- Framer Motion animations
+- Vercel deployment target
+
+---
+
+## 📋 AUDIT CHECKLIST — Run Every Check Below
+
+---
+
+### 1. ENVIRONMENT VARIABLES
+
+- [ ] All env vars used in code are declared in `.env.example` or `.env.local`
+- [ ] No API keys or secrets hardcoded anywhere in any file
+- [ ] `NEXT_PUBLIC_SANITY_PROJECT_ID` is used — not hardcoded project ID string
+- [ ] `NEXT_PUBLIC_SANITY_DATASET` is used — not hardcoded 'production' string
+- [ ] `SANITY_API_TOKEN` is used in writeClient only — never exposed to client
+- [ ] `RESEND_API_KEY` is referenced via `process.env` — never hardcoded
+- [ ] `ADMIN_EMAIL` is referenced via `process.env` — never hardcoded
+- [ ] `NEXT_PUBLIC_WHATSAPP_NUMBER` is used in WhatsAppButton — not hardcoded
+- [ ] `RESEND_FROM` fallback is safe (`onboarding@resend.dev`) for dev use
+
+---
+
+### 2. SANITY CMS
+
+- [ ] `sanity/lib/client.ts` — read client has `useCdn: true`, correct apiVersion
+- [ ] `sanity/lib/writeClient.ts` — write client has `useCdn: false`, uses token
+- [ ] `sanity/lib/queries.ts` — all GROQ queries are syntactically valid
+- [ ] `sanity/lib/image.ts` — `urlFor()` helper is exported and used correctly
+- [ ] All 5 schemas exist: product, blogPost, testimonial, faqItem, inquiry
+- [ ] `inquiry` schema has `status` field with options: new / in-progress / resolved
+- [ ] `product` schema has `slug` field with `isUnique` validation
+- [ ] `app/studio/[[...index]]/page.tsx` has `export const dynamic = 'force-dynamic'`
+- [ ] `next.config.ts` has `cdn.sanity.io` in `remotePatterns` for Next.js Image
+
+---
+
+### 3. API ROUTES
+
+#### `/api/contact/route.ts`
+- [ ] Only accepts POST method — rejects GET/PUT/DELETE
+- [ ] Parses request body with `request.json()`
+- [ ] Validates body with `contactSchema` from `lib/validations.ts`
+- [ ] Returns 400 with field errors if Zod validation fails
+- [ ] Creates Sanity inquiry with `type: 'contact'` and `status: 'new'`
+- [ ] Sends Resend email to `ADMIN_EMAIL` with all form fields in HTML body
+- [ ] If Sanity write fails — still attempts to send email, logs error
+- [ ] If Resend fails — still returns success if Sanity save succeeded
+- [ ] Always returns JSON (never plain text or undefined)
+- [ ] Has try/catch wrapping the entire handler
+- [ ] No API key or email address hardcoded in this file
+
+#### `/api/rfq/route.ts`
+- [ ] Only accepts POST method
+- [ ] Validates body with `rfqSchema` from `lib/validations.ts`
+- [ ] Returns 400 with field errors if Zod validation fails
+- [ ] Creates Sanity inquiry with `type: 'rfq'` and `status: 'new'`
+- [ ] Maps `categories` array → `products` field in Sanity
+- [ ] Combines `customization` + `message` into Sanity message field
+- [ ] Sends Resend email with all RFQ fields clearly formatted
+- [ ] Same error resilience as contact route
+- [ ] Has try/catch wrapping entire handler
+- [ ] Always returns JSON
+
+---
+
+### 4. ZOD VALIDATION SCHEMAS — `lib/validations.ts`
+
+- [ ] `contactSchema` exists and exports `ContactFormData` type
+- [ ] `contactSchema` fields: name (min 2), company (optional), country (min 2),
+      email (email format), phone (optional), message (min 10)
+- [ ] `rfqSchema` exists and exports `RFQFormData` type
+- [ ] `rfqSchema` fields: name, company (min 2), country, email, phone (optional),
+      categories (array, min 1), quantity (min 1), customization (enum), message (optional)
+- [ ] Both schemas are imported correctly in their respective API routes
+- [ ] Both schemas are imported correctly in their respective form components
+
+---
+
+### 5. CONTACT FORM — `components/forms/ContactForm.tsx`
+
+- [ ] Has `'use client'` directive at top
+- [ ] Uses `useForm` from `react-hook-form` with `zodResolver(contactSchema)`
+- [ ] All 6 fields registered: name, company, country, email, phone, message
+- [ ] Each field shows inline error message from `formState.errors`
+- [ ] Submit button shows: "Send Message" / "Sending..." / "Message Sent! ✓"
+- [ ] Submit button is `disabled` during loading
+- [ ] Success banner renders when submission succeeds
+- [ ] Error banner renders when submission fails
+- [ ] `fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) })`
+- [ ] `Content-Type: application/json` header included in fetch call
+- [ ] Form resets or success state shown after successful submit
+- [ ] No hardcoded API endpoints (uses relative `/api/contact`)
+
+---
+
+### 6. RFQ FORM — `components/forms/RFQForm.tsx`
+
+- [ ] Has `'use client'` directive at top
+- [ ] Uses `useForm` with `zodResolver(rfqSchema)`
+- [ ] Category checkboxes use `Controller` from react-hook-form
+- [ ] Categories field is an array — toggling adds/removes values
+- [ ] Error shown if zero categories selected on submit
+- [ ] Customization radio (yes / no / not-sure) uses `Controller`
+- [ ] Quantity field validated — error shown if empty
+- [ ] Submit button states: "Submit RFQ" / "Submitting..." / "RFQ Submitted! ✓"
+- [ ] Same success/error banner pattern as ContactForm
+- [ ] `fetch('/api/rfq', ...)` with JSON body and Content-Type header
+- [ ] No hardcoded endpoints
+
+---
+
+### 7. TYPESCRIPT — STRICT MODE
+
+- [ ] No `any` types used without explicit comment justification
+- [ ] All component props have proper TypeScript interfaces
+- [ ] `types/sanity.ts` exports: Product, BlogPost, Testimonial, FaqItem, SanityImage
+- [ ] `Product` type matches Sanity product schema fields exactly
+- [ ] `generateMetadata` in product page returns `Promise<Metadata>` correctly
+- [ ] API route handlers typed as `NextRequest` / `NextResponse`
+- [ ] No TypeScript errors would appear on `tsc --noEmit`
+
+---
+
+### 8. NEXT-INTL I18N
+
+- [ ] `middleware.ts` exists and handles locale detection/redirects
+- [ ] `i18n/routing.ts` defines `locales: ['en', 'fr', 'de']`, `defaultLocale: 'en'`
+- [ ] `i18n/request.ts` has `getRequestConfig` that loads correct messages file
+- [ ] `messages/en.json` exists with all required namespaces:
+      nav, hero, stats, categories, whyUs, contact, rfq, footer, whatsapp, catalog, faq
+- [ ] `messages/fr.json` has identical key structure to `en.json`
+- [ ] `messages/de.json` has identical key structure to `en.json`
+- [ ] No missing translation keys between the 3 files
+- [ ] Client components use `useTranslations()` — NOT `getTranslations()`
+- [ ] Server components / async components use `getTranslations()` — NOT `useTranslations()`
+- [ ] Footer uses `getTranslations()` (it is async server component)
+- [ ] Navbar language switcher uses locale-aware router (not plain `window.location`)
+- [ ] All locale-prefixed links use the `Link` from `@/i18n/navigation` — not `next/link` directly
+- [ ] No hardcoded English strings remain in translated components
+
+---
+
+### 9. NEXT.JS APP ROUTER — SERVER / CLIENT BOUNDARIES
+
+- [ ] All pages under `app/[locale]/` are Server Components by default (no `'use client'`)
+- [ ] Client interactivity is isolated to `Client.tsx` or `Form.tsx` suffixed components
+- [ ] `ProductDetailContent.tsx` has `'use client'` (uses useState for image gallery)
+- [ ] `CatalogClient.tsx` has `'use client'` (uses useState for filters)
+- [ ] `ProductFilters.tsx` has `'use client'` (uses debounced state)
+- [ ] `FAQAccordion.tsx` has `'use client'`
+- [ ] `WhatsAppButton.tsx` has `'use client'` (uses framer-motion, delay)
+- [ ] Navbar has `'use client'` (uses scroll listener, router)
+- [ ] No Server Component imports a Client Component that tries to use server-only APIs
+- [ ] `generateStaticParams` in product slug page correctly returns all slugs
+
+---
+
+### 10. SEO & METADATA
+
+- [ ] `app/[locale]/layout.tsx` has `metadataBase` set to `https://techsylph.shop`
+- [ ] `title.template` is `'%s | TechSylph'`
+- [ ] All 10 static pages have `export const metadata: Metadata` with unique title + description
+- [ ] Product slug page uses `generateMetadata()` — not static `metadata` export
+- [ ] `generateMetadata` handles missing product gracefully (returns fallback)
+- [ ] `app/sitemap.ts` exists at app root (not inside `[locale]`)
+- [ ] Sitemap includes all 3 locales for each static page
+- [ ] Sitemap fetches and includes dynamic product + blog slugs
+- [ ] `app/robots.ts` disallows `/studio` and `/api/`
+- [ ] `components/shared/JsonLd.tsx` exists and renders `application/ld+json` script
+- [ ] Organization JSON-LD is added in `[locale]/layout.tsx`
+- [ ] Product JSON-LD is added in the product slug page
+
+---
+
+### 11. IMAGE HANDLING
+
+- [ ] All `next/image` usage includes `width` + `height` OR `fill` with a positioned parent
+- [ ] `urlFor(image).width(X).url()` is used for Sanity images — not raw asset URL
+- [ ] Placeholder shown when `product.images` is empty or undefined
+- [ ] `next.config.ts` includes `cdn.sanity.io` in `images.remotePatterns`
+- [ ] No `<img>` tags used where `next/image` should be used
+
+---
+
+### 12. ERROR HANDLING & FALLBACKS
+
+- [ ] Catalog page (`catalog/page.tsx`) has try/catch around `client.fetch` — fallback `[]`
+- [ ] Product slug page calls `notFound()` when product is null
+- [ ] FAQ page falls back to hardcoded array if Sanity returns empty
+- [ ] Related products section handles empty array gracefully (renders nothing)
+- [ ] WhatsAppButton has `delay` before showing — no flash on page load
+- [ ] All `async` server components have error handling for failed fetches
+- [ ] Blog page handles empty posts array without crashing
+
+---
+
+### 13. FRAMER MOTION ANIMATIONS
+
+- [ ] All `whileInView` animations have `viewport={{ once: true }}` to prevent re-triggering
+- [ ] No animation causes layout shift (no animating `width`, `height` directly)
+- [ ] `WhatsAppButton` fade-in uses `AnimatePresence` or `useEffect` delay correctly
+- [ ] Stagger animations use `variants` with `staggerChildren` on parent
+- [ ] No framer-motion imported in Server Components (only in `'use client'` files)
+
+---
+
+### 14. SANITY STUDIO
+
+- [ ] `app/studio/[[...index]]/page.tsx` exists
+- [ ] `export const dynamic = 'force-dynamic'` present in studio page
+- [ ] Studio page renders `<NextStudio config={config} />`
+- [ ] `sanity.config.ts` has correct `projectId` and `dataset` from env vars
+- [ ] All 5 schemas are imported and listed in `sanity.config.ts` schema array
+- [ ] `robots.ts` disallows `/studio` from being indexed
+
+---
+
+### 15. GENERAL CODE QUALITY
+
+- [ ] No `console.log` statements left in production code (only `console.error` in catch blocks)
+- [ ] No unused imports in any file
+- [ ] No commented-out blocks of code left in components
+- [ ] No `TODO` comments that represent broken functionality (cosmetic TODOs are fine)
+- [ ] Barrel exports (`index.ts`) exist for: `components/layout`, `components/home`,
+      `components/catalog`, `components/forms`
+- [ ] No duplicate component definitions across files
+- [ ] `public/og-image.jpg` — note if missing (non-blocking but should be flagged)
+- [ ] `public/lookbook.pdf` — note if missing (non-blocking but should be flagged)
+- [ ] `public/logo.png` — note if missing
+
+---
+
+## 📄 OUTPUT FORMAT — Write this to `QA_REPORT.md` in project root
+
+```
+# TechSylph QA Report
+Generated: [date]
+Auditor: Cursor AI
+
+---
+
+## Summary
+
+| Area                    | Status         | Issues Found |
+|-------------------------|----------------|--------------|
+| Environment Variables   | ✅ / ⚠️ / ❌  |              |
+| Sanity CMS              | ✅ / ⚠️ / ❌  |              |
+| API Routes              | ✅ / ⚠️ / ❌  |              |
+| Zod Validation          | ✅ / ⚠️ / ❌  |              |
+| Contact Form            | ✅ / ⚠️ / ❌  |              |
+| RFQ Form                | ✅ / ⚠️ / ❌  |              |
+| TypeScript              | ✅ / ⚠️ / ❌  |              |
+| i18n / next-intl        | ✅ / ⚠️ / ❌  |              |
+| Server/Client Boundaries| ✅ / ⚠️ / ❌  |              |
+| SEO & Metadata          | ✅ / ⚠️ / ❌  |              |
+| Image Handling          | ✅ / ⚠️ / ❌  |              |
+| Error Handling          | ✅ / ⚠️ / ❌  |              |
+| Animations              | ✅ / ⚠️ / ❌  |              |
+| Sanity Studio           | ✅ / ⚠️ / ❌  |              |
+| Code Quality            | ✅ / ⚠️ / ❌  |              |
+
+Overall Health: [X / 10]
+
+---
+
+## 🔴 CRITICAL — Breaks functionality or security
+[List each issue with: description, file path, line number if possible]
+
+## 🟠 HIGH — Should fix before launch
+[List each issue]
+
+## 🟡 MEDIUM — Important but not blocking
+[List each issue]
+
+## 🟢 LOW — Polish and improvements
+[List each issue]
+
+## ✅ PASSED — All checks confirmed working
+[List areas with zero issues]
+
+---
+
+## Missing Assets (non-blocking)
+- public/og-image.jpg: [exists / MISSING]
+- public/lookbook.pdf: [exists / MISSING]
+- public/logo.png: [exists / MISSING]
+```
+
+---
+
+## 🚫 CONSTRAINTS
+
+- Do NOT fix anything — audit and report only
+- Do NOT modify any file except creating `QA_REPORT.md`
+- Do NOT report issues you cannot confirm by reading actual code
+- Do NOT skip any section of the checklist
+- Flag EVERY failed check — even if it seems minor

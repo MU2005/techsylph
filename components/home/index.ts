@@ -1,0 +1,9 @@
+export { default as HeroSection } from "./HeroSection";
+export { default as StatsBar } from "./StatsBar";
+export { default as FeaturedCategories } from "./FeaturedCategories";
+export { default as WhyUsMini } from "./WhyUsMini";
+export { default as FeaturedProducts } from "./FeaturedProducts";
+export { default as HowItWorksMini } from "./HowItWorksMini";
+export { default as Testimonials } from "./Testimonials";
+export { default as CTABanner } from "./CTABanner";
+export { default as HomeAnimationWrapper } from "./HomeAnimationWrapper";
