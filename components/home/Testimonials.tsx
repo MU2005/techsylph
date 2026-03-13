@@ -25,7 +25,6 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
     <section className="section-padding section-alt">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          label="Client Reviews"
           title="What Our"
           highlight="Buyers Say"
           centered

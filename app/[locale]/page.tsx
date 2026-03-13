@@ -15,6 +15,9 @@ import HowItWorksMini from "@/components/home/HowItWorksMini";
 import Testimonials from "@/components/home/Testimonials";
 import CTABanner from "@/components/home/CTABanner";
 
+// Revalidate so Sanity changes (e.g. hero video) show up without redeploy
+export const revalidate = 60;
+
 export default async function HomePage() {
   const [featuredProducts, testimonials, siteSettings] = await Promise.all([
     client.fetch<Product[]>(FEATURED_PRODUCTS_QUERY).catch(() => []),

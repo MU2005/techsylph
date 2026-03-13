@@ -102,7 +102,6 @@ export default function FeaturedCategories({
     <section className="section-padding section-alt">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          label="Our Products"
           title="Premium Apparel"
           highlight="Categories"
           subtitle="From basics to activewear — explore our full range of export-ready garments manufactured in Pakistan."

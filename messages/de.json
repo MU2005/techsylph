@@ -23,7 +23,16 @@
     "stat2": "20+ Länder",
     "stat3": "Individuelle Eigenmarke"
   },
+  "ctaBanner": {
+    "overline": "Bereit zu beziehen?",
+    "title1": "Starten Sie Ihre globale",
+    "title2": "Exportreise heute",
+    "subtitle": "Schließen Sie sich Hunderten internationaler Einkäufer an, die Premium-Bekleidung von Pakistans besten Herstellern beziehen.",
+    "cta1": "Angebot anfordern",
+    "cta2": "Katalog durchsuchen"
+  },
   "stats": {
+    "heading": "In Zahlen",
     "products": "Verfügbare Produkte",
     "countries": "Bediente Länder",
     "moq": "Mindestbestellmenge",

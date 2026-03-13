@@ -23,7 +23,16 @@
     "stat2": "20+ Countries",
     "stat3": "Custom Private Label"
   },
+  "ctaBanner": {
+    "overline": "Ready to source?",
+    "title1": "Start your global export",
+    "title2": "journey today",
+    "subtitle": "Join hundreds of international buyers sourcing premium apparel from Pakistan's finest manufacturers.",
+    "cta1": "Request a quote",
+    "cta2": "Browse catalog"
+  },
   "stats": {
+    "heading": "By the Numbers",
     "products": "Products Available",
     "countries": "Countries Served",
     "moq": "Minimum Order Qty",

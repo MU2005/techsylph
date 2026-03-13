@@ -23,7 +23,16 @@
     "stat2": "20+ Pays",
     "stat3": "Étiquette Privée Sur Mesure"
   },
+  "ctaBanner": {
+    "overline": "Prêt à sourcer ?",
+    "title1": "Lancez votre export",
+    "title2": "à l'international",
+    "subtitle": "Rejoignez des centaines d'acheteurs internationaux qui s'approvisionnent en prêt-à-porter auprès des meilleurs fabricants du Pakistan.",
+    "cta1": "Demander un devis",
+    "cta2": "Voir le catalogue"
+  },
   "stats": {
+    "heading": "En Chiffres",
     "products": "Produits Disponibles",
     "countries": "Pays Desservis",
     "moq": "Quantité Minimale",

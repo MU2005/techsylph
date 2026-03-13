@@ -30,6 +30,16 @@ export default defineType({
       initialValue: "4 Weeks",
     }),
     defineField({
+      name: "heroVideo",
+      title: "Hero video (mobile)",
+      type: "file",
+      options: {
+        accept: "video/mp4,video/webm",
+      },
+      description:
+        "Video shown below the hero on mobile/small screens. Upload MP4 or WebM. Leave empty to use the default video.",
+    }),
+    defineField({
       name: "categories",
       title: "Product Categories",
       type: "array",

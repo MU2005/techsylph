@@ -56,6 +56,8 @@ export interface SiteSettings {
   statsCountries?: string;
   statsMoq?: string;
   statsTurnaround?: string;
+  /** URL of the hero video shown on mobile (from Sanity file asset). */
+  heroVideoUrl?: string;
   categories?: {
     title: string;
     slug: string;

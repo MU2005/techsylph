@@ -29,7 +29,6 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
     <section className="section-padding section-alt">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          label={t("fpLabel")}
           title={t("fpTitle")}
           highlight={t("fpHighlight")}
           subtitle={t("fpSubtitle")}

@@ -25,7 +25,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
 
   return (
     <section
-      className="relative flex min-h-screen items-center bg-white pt-24 md:pt-32"
+      className="relative flex flex-col overflow-x-hidden bg-white pt-24 md:pt-32 lg:min-h-screen lg:items-center"
       style={{
         background: `
           radial-gradient(circle at 20% 50%, #D1FAE5 0%, transparent 50%),
@@ -34,9 +34,11 @@ export default function HeroSection({ settings }: HeroSectionProps) {
         `,
       }}
     >
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
-        {/* Left column — text */}
-        <div className="flex flex-col">
+      {/* Single column on mobile: hero content then video; two columns on lg */}
+      <div className="flex w-full flex-1 flex-col gap-10 lg:flex-initial lg:justify-center">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
+          {/* Left column — text */}
+          <div className="flex flex-col">
           {/* Top badge */}
           <motion.div
             initial={fadeUp.initial}
@@ -92,12 +94,12 @@ export default function HeroSection({ settings }: HeroSectionProps) {
           </motion.div>
         </div>
 
-        {/* Right column — card + floating chips */}
+        {/* Right column — card + floating chips (hidden on mobile) */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative flex min-h-[400px] items-center justify-center lg:min-h-[500px]"
+          className="relative hidden min-h-[400px] items-center justify-center lg:flex lg:min-h-[500px]"
         >
           {/* Main card — clean white card-highlight */}
           <div className="card-highlight relative w-full max-w-sm p-8 rounded-2xl">
@@ -143,6 +145,24 @@ export default function HeroSection({ settings }: HeroSectionProps) {
             📦 Low MOQ
           </motion.div>
         </motion.div>
+        </div>
+
+        {/* Video: full-width below hero on mobile/small screens only (from Sanity or default) */}
+        <div className="w-full border-t border-surface-2/60 lg:hidden">
+          <video
+            src={
+              settings?.heroVideoUrl?.trim()
+                ? settings.heroVideoUrl
+                : "/PinDown.io_@zcstreetwear_1773387807.mp4"
+            }
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full aspect-video object-cover"
+            aria-label="TechSylph apparel manufacturing"
+          />
+        </div>
       </div>
 
       {/* Bottom separator — draws in on scroll */}
