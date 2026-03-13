@@ -6,6 +6,7 @@ import { Shirt, PackageCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { CTAButton } from "@/components/shared/CTAButton";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { AnimatedLine } from "@/components/shared/ScrollAnimations";
 import { urlFor } from "@/sanity/lib/image";
 import type { Product } from "@/types/sanity";
 
@@ -34,6 +35,13 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
           subtitle={t("fpSubtitle")}
           centered
         />
+        <div className="mx-auto mt-6 max-w-2xl">
+          <AnimatedLine
+            direction="horizontal"
+            className="h-px w-full bg-gray-400"
+            origin="center"
+          />
+        </div>
         {products.length === 0 ? (
           <div className="py-16 text-center font-body text-text-muted">
             {t("emptyMessage")}

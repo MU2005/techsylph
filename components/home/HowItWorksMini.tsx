@@ -51,29 +51,27 @@ export default function HowItWorksMini() {
           {STEPS.map((step, i) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 24 }}
+              className="glow-card relative"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="relative p-8 text-center"
+              transition={{ duration: 0.5, delay: i * 0.15 }}
             >
-              <span
-                className="absolute right-4 top-4 font-display text-7xl font-bold text-text-primary/[0.03]"
-                aria-hidden
-              >
-                {step.number}
-              </span>
-              <div className="gradient-bg mx-auto flex size-16 items-center justify-center rounded-2xl">
-                <span className="font-display text-xl font-bold text-white">
+              <div className="glow-card-inner relative px-8 pt-14 pb-10 text-center">
+                {/* Digit: fixed in top-right with its own padding, no overlap */}
+                <span
+                  className="absolute right-6 top-6 box-border pr-2 pt-1 font-display text-5xl font-bold leading-none text-text-primary/[0.12]"
+                  aria-hidden
+                >
                   {step.number}
                 </span>
+                <h3 className="mt-2 font-display text-xl font-semibold text-text-primary">
+                  {step.title}
+                </h3>
+                <p className="mt-3 font-body text-sm leading-relaxed text-text-secondary">
+                  {step.desc}
+                </p>
               </div>
-              <h3 className="mt-4 font-display text-xl font-semibold text-text-primary">
-                {step.title}
-              </h3>
-              <p className="mt-2 font-body text-sm leading-relaxed text-text-secondary">
-                {step.desc}
-              </p>
             </motion.div>
           ))}
         </div>

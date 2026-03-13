@@ -44,6 +44,21 @@ export default defineType({
       title: "Estimated Quantity",
       type: "string",
     }),
+    defineField({
+      name: "hasAttachment",
+      title: "Has Attachment",
+      type: "boolean",
+    }),
+    defineField({
+      name: "attachmentName",
+      title: "Attachment Filename",
+      type: "string",
+    }),
+    defineField({
+      name: "customLabelRequest",
+      title: "Custom Label Request",
+      type: "boolean",
+    }),
   ],
   preview: {
     select: { title: "name", subtitle: "email" },

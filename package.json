@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "format": "prettier --write .",
     "test:resend": "node scripts/test-resend.mjs",
     "import:products": "node scripts/csv-to-ndjson.js"

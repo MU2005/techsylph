@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { PackageSearch } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -9,19 +10,21 @@ import ProductFilters, { type FilterState } from "./ProductFilters";
 import { CTAButton } from "@/components/shared/CTAButton";
 import type { Product } from "@/types/sanity";
 
-const DEFAULT_FILTERS: FilterState = {
-  search: "",
-  category: "",
-  customizable: false,
-};
-
 type CatalogClientProps = {
   products: Product[];
 };
 
 export default function CatalogClient({ products }: CatalogClientProps) {
   const t = useTranslations("catalog");
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams.get("category") ?? "";
+  const [filters, setFilters] = useState<FilterState>(() => ({
+    search: "",
+    category: categoryFromUrl,
+    customizable: false,
+  }));
+
+  const effectiveCategory = categoryFromUrl || filters.category;
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
@@ -30,16 +33,17 @@ export default function CatalogClient({ products }: CatalogClientProps) {
         p.name.toLowerCase().includes(filters.search.toLowerCase()) ||
         (p.description?.toLowerCase().includes(filters.search.toLowerCase()) ??
           false);
-      const matchCategory = !filters.category || p.category === filters.category;
+      const matchCategory =
+        !effectiveCategory || p.category === effectiveCategory;
       const matchCustom = !filters.customizable || p.customizable === true;
       return matchSearch && matchCategory && matchCustom;
     });
-  }, [products, filters]);
+  }, [products, filters, effectiveCategory]);
 
   return (
     <>
       <ProductFilters
-        filters={filters}
+        filters={{ ...filters, category: effectiveCategory }}
         onFilterChange={setFilters}
         totalCount={filtered.length}
       />
@@ -55,7 +59,13 @@ export default function CatalogClient({ products }: CatalogClientProps) {
           <CTAButton
             variant="outline"
             size="md"
-            onClick={() => setFilters(DEFAULT_FILTERS)}
+            onClick={() =>
+              setFilters({
+                search: "",
+                category: "",
+                customizable: false,
+              })
+            }
             className="mt-6"
           >
             {t("clearFilters")}

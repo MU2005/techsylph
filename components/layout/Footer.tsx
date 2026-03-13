@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { AnimatedLine } from "@/components/shared/ScrollAnimations";
 
 const COMPANY_LINKS = [
   { href: "/", key: "home" as const },
@@ -34,7 +35,15 @@ export default async function Footer() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "+923001234567";
 
   return (
-    <footer className="border-t border-white/10 bg-brand-dark">
+    <footer className="relative bg-brand-dark">
+      {/* Scroll-animated top separator */}
+      <div className="absolute left-0 right-0 top-0">
+        <AnimatedLine
+          direction="horizontal"
+          className="h-px w-full bg-white/50"
+          origin="center"
+        />
+      </div>
       <div className="mx-auto max-w-7xl px-6">
         {/* Top section: 4 columns */}
         <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">

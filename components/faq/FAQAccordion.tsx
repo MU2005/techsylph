@@ -50,7 +50,7 @@ export function FAQAccordion({
       <div className="card-base rounded-2xl p-6 text-center">
         <p className="font-display font-bold text-text-primary">{t("stillQuestions")}</p>
         <div className="mt-4">
-          <CTAButton href={`/${locale}/contact`} variant="primary">
+          <CTAButton href="/contact" variant="primary">
             {t("contactUs")}
           </CTAButton>
         </div>

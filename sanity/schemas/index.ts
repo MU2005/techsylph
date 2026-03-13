@@ -3,6 +3,8 @@ import blogPost from "./blogPost";
 import testimonial from "./testimonial";
 import faqItem from "./faqItem";
 import inquiry from "./inquiry";
+import siteSettings from "./siteSettings";
+import customLabel from "./customLabel";
 
 export const schemaTypes = [
   product,
@@ -10,4 +12,6 @@ export const schemaTypes = [
   testimonial,
   faqItem,
   inquiry,
+  siteSettings,
+  customLabel,
 ];

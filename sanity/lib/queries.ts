@@ -23,7 +23,13 @@ export const BLOG_POST_BY_SLUG_QUERY = `*[_type == "blogPost" && slug.current ==
 }`;
 
 export const TESTIMONIALS_QUERY = `*[_type == "testimonial"] | order(_createdAt desc) {
-  _id, name, role, company, text, rating, avatar
+  _id,
+  name,
+  role,
+  company,
+  country,
+  rating,
+  "quote": coalesce(quote, text)
 }`;
 
 export const FAQ_QUERY = `*[_type == "faqItem"] | order(order asc) {
@@ -33,4 +39,39 @@ export const FAQ_QUERY = `*[_type == "faqItem"] | order(order asc) {
 export const INQUIRIES_QUERY = `*[_type == "inquiry"] | order(_createdAt desc) {
   _id, name, company, country, email, phone,
   message, type, status, _createdAt
+}`;
+
+export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
+  statsProducts,
+  statsCountries,
+  statsMoq,
+  statsTurnaround,
+  categories[] {
+    title,
+    slug,
+    description,
+    icon,
+    color,
+    image
+  }
+}`;
+
+export const CUSTOM_LABEL_QUERY = `*[_type == "customLabel"][0] {
+  heroHeadline,
+  heroSubtitle,
+  moqNote,
+  turnaroundNote,
+  customizations[] {
+    title,
+    description,
+    icon,
+    details,
+    image
+  },
+  process[] | order(stepNumber asc) {
+    stepNumber,
+    title,
+    description,
+    duration
+  }
 }`;

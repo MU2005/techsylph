@@ -86,4 +86,4 @@ After the first deploy, every push to `main` (or your production branch) will tr
 - **GitHub repo:** https://github.com/MU2005/techsylph  
 - **Env template:** `.env.example` (copy to `.env.local` locally; use Vercel UI in production)  
 - **Build:** `npm run build`  
-- **Lint:** `npm run lint`
+- **Lint:** `npm run lint` (uses ESLint directly; Next.js 16 removed `next lint`)

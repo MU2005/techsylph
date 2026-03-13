@@ -20,7 +20,7 @@ const variantClasses: Record<CTAButtonVariant, string> = {
   primary:
     "gradient-bg text-white font-body font-semibold rounded-xl shadow-sm hover:shadow-md hover:opacity-90 transition-all duration-200 border-0",
   outline:
-    "bg-white border border-surface-3 text-text-primary font-body font-semibold rounded-xl hover:bg-surface-1 hover:border-brand-green/40 transition-all duration-200",
+    "bg-white border border-surface-3 text-text-primary font-body font-semibold rounded-xl transition-all duration-200 btn-fill-sweep overflow-hidden",
   ghost:
     "bg-transparent border-0 text-text-secondary font-body rounded-xl hover:bg-surface-1 hover:text-text-primary transition-all duration-200",
 };
@@ -47,10 +47,16 @@ export function CTAButton({
     className
   );
 
+  const content = variant === "outline" ? (
+    <span className="relative z-[1]">{children}</span>
+  ) : (
+    children
+  );
+
   if (href) {
     return (
       <Link href={href} className={classes}>
-        {children}
+        {content}
       </Link>
     );
   }
@@ -62,7 +68,7 @@ export function CTAButton({
       disabled={disabled}
       className={classes}
     >
-      {children}
+      {content}
     </button>
   );
 }

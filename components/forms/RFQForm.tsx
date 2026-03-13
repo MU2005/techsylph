@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { Upload } from "lucide-react";
 import { rfqSchema, type RFQFormData } from "@/lib/validations";
 import { cn } from "@/lib/utils";
 
@@ -29,42 +31,79 @@ const errorClass = "mt-1 font-body text-xs text-red-500";
 const pillBase =
   "cursor-pointer rounded-full border px-4 py-2 text-sm font-body transition-colors duration-200";
 
+const CUSTOM_CATEGORY = "Custom / Private Label";
+
 export function RFQForm() {
   const t = useTranslations("rfq");
   const tCatalog = useTranslations("catalog");
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<RFQFormData>({
     resolver: zodResolver(rfqSchema),
     defaultValues: {
       categories: [],
       customization: undefined,
+      customLabelRequest: false,
     },
   });
 
-  async function onSubmit(data: RFQFormData) {
+  const categories = watch("categories");
+  const customLabelRequest = watch("customLabelRequest");
+  const showAttachment =
+    customLabelRequest === true || (Array.isArray(categories) && categories.includes(CUSTOM_CATEGORY));
+
+  useEffect(() => {
+    if (searchParams.get("type") === "custom") {
+      setValue("categories", [CUSTOM_CATEGORY]);
+      setValue("customLabelRequest", true);
+    }
+  }, [searchParams, setValue]);
+
+  async function onSubmit(formValues: RFQFormData) {
     setIsLoading(true);
     setErrorMessage(null);
     setIsSuccess(false);
     try {
-      const res = await fetch("/api/rfq", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const payload = {
+        ...formValues,
+        attachment: undefined,
+      };
+      let res: Response;
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("data", JSON.stringify(payload));
+        formData.append("attachment", selectedFile);
+        res = await fetch("/api/rfq", {
+          method: "POST",
+          body: formData,
+        });
+      } else {
+        res = await fetch("/api/rfq", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formValues),
+        });
+      }
       const json = await res.json();
       if (!res.ok) {
         setErrorMessage(json.error ?? t("errorMsg"));
         return;
       }
       setIsSuccess(true);
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch {
       setErrorMessage(t("networkError"));
     } finally {
@@ -256,6 +295,75 @@ export function RFQForm() {
           <p className={errorClass}>{errors.customization.message}</p>
         )}
       </div>
+
+      {Array.isArray(categories) && categories.includes(CUSTOM_CATEGORY) && (
+        <div>
+          <label className="mt-4 flex cursor-pointer items-center gap-3">
+            <input type="checkbox" {...register("customLabelRequest")} />
+            <span className="font-body text-sm text-text-secondary">
+              {t("customLabelCheckbox")}
+            </span>
+          </label>
+        </div>
+      )}
+
+      {showAttachment && (
+        <div>
+          <label className={labelClass}>
+            {t("attachmentLabel")}
+            <span className="ml-1 font-body text-sm font-normal text-text-muted">
+              (optional — JPG, PNG, PDF, max 10MB)
+            </span>
+          </label>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => fileInputRef.current?.click()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }
+            }}
+            className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-surface-border p-6 text-center transition-colors hover:border-brand-green"
+          >
+            <Upload className="mx-auto mb-2 size-8 text-text-muted" />
+            <p className="font-body text-sm text-text-secondary">
+              {selectedFile ? selectedFile.name : "Click to upload or drag and drop"}
+            </p>
+            {selectedFile && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedFile(null);
+                  setValue("attachment", undefined);
+                  if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+                className="mt-1 text-xs text-red-500 hover:underline"
+              >
+                Remove
+              </button>
+            )}
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp,.pdf"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setSelectedFile(file);
+                setValue("attachment", file);
+              }
+            }}
+          />
+          {errors.attachment && (
+            <p className={errorClass}>{errors.attachment.message}</p>
+          )}
+        </div>
+      )}
 
       <div>
         <label htmlFor="rfq-message" className={labelClass}>

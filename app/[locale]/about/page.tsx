@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { Link } from "@/i18n/navigation";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { CTAButton } from "@/components/shared/CTAButton";
 import { Target, Eye, Heart, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -157,24 +157,45 @@ export default async function AboutPage({
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden section-padding gradient-bg">
-        <div className="absolute right-0 top-0 size-64 rounded-full bg-white/5 blur-3xl" aria-hidden />
-        <div className="absolute bottom-0 left-0 size-48 rounded-full bg-white/5 blur-2xl" aria-hidden />
-        <div className="relative mx-auto max-w-7xl px-6 text-center">
-          <h2 className="font-display text-4xl font-bold text-white md:text-5xl">
-            Partner With Us Today
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl font-body text-lg text-white/80">
-            Join hundreds of international buyers sourcing premium apparel from
-            Pakistan&apos;s finest manufacturers.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <CTAButton href={`/${locale}/catalog`} variant="primary" size="lg" className="bg-white text-brand-green hover:bg-surface-1">
-              Browse Catalog
-            </CTAButton>
-            <CTAButton href={`/${locale}/rfq`} variant="outline" size="lg" className="border-2 border-white/50 text-white hover:bg-white/10">
-              Get a Quote
-            </CTAButton>
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-4xl">
+          <div
+            className="relative overflow-hidden rounded-3xl px-8 py-14 text-center shadow-xl md:px-14 md:py-16"
+            style={{
+              background: "linear-gradient(135deg, #047857 0%, #059669 40%, #10B981 100%)",
+              boxShadow: "0 25px 50px -12px rgba(5, 150, 105, 0.25), 0 0 0 1px rgba(255,255,255,0.08) inset",
+            }}
+          >
+            <div className="absolute right-0 top-0 size-64 rounded-full bg-white/5 blur-3xl" aria-hidden />
+            <div className="absolute bottom-0 left-0 size-48 rounded-full bg-white/5 blur-2xl" aria-hidden />
+            <span className="relative inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 font-display text-xs font-semibold uppercase tracking-widest text-white/90">
+              Let&apos;s work together
+            </span>
+            <h2 className="relative mt-5 font-display text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
+              Partner With Us Today
+            </h2>
+            <p className="relative mx-auto mt-4 max-w-xl font-body text-base leading-relaxed text-white/85 md:text-lg">
+              Join hundreds of international buyers sourcing premium apparel from Pakistan&apos;s finest manufacturers.
+            </p>
+            <div
+              className="relative mx-auto mt-6 h-px w-24 opacity-60"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)" }}
+              aria-hidden
+            />
+            <div className="relative mt-8 flex flex-wrap justify-center gap-4">
+              <Link
+                href="/catalog"
+                className="inline-flex items-center justify-center rounded-full border-0 bg-white px-10 py-4 font-display text-base font-bold text-brand-green shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-green"
+              >
+                Browse Catalog
+              </Link>
+              <Link
+                href="/rfq"
+                className="inline-flex items-center justify-center rounded-full border-2 border-white/80 bg-transparent px-10 py-4 font-display text-base font-bold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-green"
+              >
+                Get a Quote
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -200,6 +200,182 @@
   display: inline-block;
 }
 
+/* Glowing border card — emerald palette */
+.glow-card {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  z-index: 0;
+}
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 17px;
+  background: linear-gradient(
+    135deg,
+    #059669,
+    #10B981,
+    #6EE7B7,
+    #10B981,
+    #059669
+  );
+  background-size: 300% 300%;
+  animation: glow-rotate 4s linear infinite;
+  z-index: -1;
+  opacity: 0.85;
+}
+
+.glow-card::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    #059669,
+    #10B981,
+    #6EE7B7,
+    #10B981,
+    #059669
+  );
+  background-size: 300% 300%;
+  animation: glow-rotate 4s linear infinite;
+  z-index: -2;
+  opacity: 0.25;
+  filter: blur(8px);
+}
+
+@keyframes glow-rotate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+  animation-duration: 2s;
+}
+.glow-card:hover::after {
+  opacity: 0.4;
+  filter: blur(12px);
+}
+
+.glow-card-inner {
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.glow-card-subtle {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  z-index: 0;
+}
+
+.glow-card-subtle::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 17px;
+  background: linear-gradient(
+    135deg,
+    #059669,
+    #10B981,
+    #6EE7B7,
+    #10B981,
+    #059669
+  );
+  background-size: 300% 300%;
+  animation: glow-rotate 6s linear infinite;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+.glow-card-subtle::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    #059669,
+    #10B981,
+    #6EE7B7,
+    #10B981,
+    #059669
+  );
+  background-size: 300% 300%;
+  animation: glow-rotate 6s linear infinite;
+  z-index: -2;
+  opacity: 0.12;
+  filter: blur(8px);
+}
+
+.glow-card-subtle:hover::before {
+  opacity: 0.85;
+  animation-duration: 3s;
+}
+.glow-card-subtle:hover::after {
+  opacity: 0.25;
+  filter: blur(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-card::before,
+  .glow-card::after,
+  .glow-card-subtle::before,
+  .glow-card-subtle::after {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* ── Outline button: left-to-right green fill on hover ── */
+.btn-fill-sweep {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.btn-fill-sweep::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #059669;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.1s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.btn-fill-sweep:hover::before {
+  transform: scaleX(1);
+}
+
+.btn-fill-sweep > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-fill-sweep:hover {
+  color: white;
+  border-color: #059669;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-fill-sweep::before {
+    transition: none;
+  }
+}
+
 .section-padding {
   padding: var(--section-padding);
 }

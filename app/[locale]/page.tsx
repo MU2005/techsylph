@@ -1,6 +1,10 @@
 import { client } from "@/sanity/lib/client";
-import { FEATURED_PRODUCTS_QUERY } from "@/sanity/lib/queries";
-import type { Product } from "@/types/sanity";
+import {
+  FEATURED_PRODUCTS_QUERY,
+  TESTIMONIALS_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
+import type { Product, Testimonial, SiteSettings } from "@/types/sanity";
 import HomeAnimationWrapper from "@/components/home/HomeAnimationWrapper";
 import HeroSection from "@/components/home/HeroSection";
 import StatsBar from "@/components/home/StatsBar";
@@ -12,19 +16,21 @@ import Testimonials from "@/components/home/Testimonials";
 import CTABanner from "@/components/home/CTABanner";
 
 export default async function HomePage() {
-  const featuredProducts = await client
-    .fetch<Product[]>(FEATURED_PRODUCTS_QUERY)
-    .catch(() => []);
+  const [featuredProducts, testimonials, siteSettings] = await Promise.all([
+    client.fetch<Product[]>(FEATURED_PRODUCTS_QUERY).catch(() => []),
+    client.fetch<Testimonial[]>(TESTIMONIALS_QUERY).catch(() => []),
+    client.fetch<SiteSettings | null>(SITE_SETTINGS_QUERY).catch(() => null),
+  ]);
 
   return (
     <HomeAnimationWrapper>
-      <HeroSection />
-      <StatsBar />
-      <FeaturedCategories />
+      <HeroSection settings={siteSettings} />
+      <StatsBar settings={siteSettings} />
+      <FeaturedCategories categories={siteSettings?.categories ?? []} />
       <WhyUsMini />
       <FeaturedProducts products={Array.isArray(featuredProducts) ? featuredProducts : []} />
       <HowItWorksMini />
-      <Testimonials />
+      <Testimonials testimonials={Array.isArray(testimonials) ? testimonials : []} />
       <CTABanner />
     </HomeAnimationWrapper>
   );

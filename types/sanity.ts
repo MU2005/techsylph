@@ -38,8 +38,9 @@ export interface Testimonial {
   name: string;
   role?: string;
   company?: string;
-  text: string;
+  country?: string;
   rating?: number;
+  quote: string;
   avatar?: SanityImage;
 }
 
@@ -48,4 +49,39 @@ export interface FaqItem {
   question: string;
   answer: string;
   order?: number;
+}
+
+export interface SiteSettings {
+  statsProducts?: string;
+  statsCountries?: string;
+  statsMoq?: string;
+  statsTurnaround?: string;
+  categories?: {
+    title: string;
+    slug: string;
+    description?: string;
+    icon?: string;
+    color?: string;
+    image?: SanityImage;
+  }[];
+}
+
+export interface CustomLabelData {
+  heroHeadline?: string;
+  heroSubtitle?: string;
+  moqNote?: string;
+  turnaroundNote?: string;
+  customizations?: {
+    title: string;
+    description?: string;
+    icon?: string;
+    details?: string[];
+    image?: SanityImage;
+  }[];
+  process?: {
+    stepNumber: number;
+    title: string;
+    description?: string;
+    duration?: string;
+  }[];
 }

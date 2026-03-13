@@ -1,33 +1,54 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { SiteSettings } from "@/types/sanity";
 
-const STATS = [
-  { value: "500+", label: "Products Available" },
-  { value: "20+", label: "Countries Served" },
-  { value: "50 pcs", label: "Minimum Order Qty" },
-  { value: "4 Weeks", label: "Avg. Turnaround Time" },
+interface StatsBarProps {
+  settings: SiteSettings | null;
+}
+
+const STAT_LABELS = [
+  "Products Available",
+  "Countries Served",
+  "Minimum Order Qty",
+  "Avg. Turnaround Time",
 ];
 
-export default function StatsBar() {
+export default function StatsBar({ settings }: StatsBarProps) {
+  const values = [
+    settings?.statsProducts ?? "500+",
+    settings?.statsCountries ?? "20+",
+    settings?.statsMoq ?? "50 pcs",
+    settings?.statsTurnaround ?? "4 Weeks",
+  ];
+
   return (
     <section className="gradient-bg">
       <div className="mx-auto max-w-7xl px-6 py-10">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-0">
-          {STATS.map((stat, i) => (
+          {values.map((value, i) => (
             <motion.div
-              key={stat.label}
+              key={STAT_LABELS[i]}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className={`text-center ${i > 0 ? "md:border-l md:border-white/20 md:pl-8" : ""}`}
             >
-              <p className="font-display text-3xl font-bold text-white">
-                {stat.value}
-              </p>
+              <motion.p
+                className="font-display text-3xl font-bold text-white"
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.2, 1],
+                  delay: i * 0.12,
+                }}
+              >
+                {value}
+              </motion.p>
               <p className="mt-1 font-body text-sm text-white/70">
-                {stat.label}
+                {STAT_LABELS[i]}
               </p>
             </motion.div>
           ))}

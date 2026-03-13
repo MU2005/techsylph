@@ -27,26 +27,48 @@ type ProductFiltersProps = {
 
 const DEBOUNCE_MS = 300;
 
+function SearchInputWithDebounce({
+  initialSearch,
+  filters,
+  onFilterChange,
+  placeholder,
+  "aria-label": ariaLabel,
+}: {
+  initialSearch: string;
+  filters: FilterState;
+  onFilterChange: (filters: FilterState) => void;
+  placeholder: string;
+  "aria-label": string;
+}) {
+  const [searchInput, setSearchInput] = useState(initialSearch);
+  const filtersRef = useRef(filters);
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
+  useEffect(() => {
+    const id = setTimeout(() => {
+      onFilterChange({ ...filtersRef.current, search: searchInput });
+    }, DEBOUNCE_MS);
+    return () => clearTimeout(id);
+  }, [searchInput, onFilterChange]);
+  return (
+    <input
+      type="search"
+      value={searchInput}
+      onChange={(e) => setSearchInput(e.target.value)}
+      placeholder={placeholder}
+      className="w-full rounded-xl border border-surface-3 bg-white py-2.5 pl-10 pr-4 font-body text-sm text-text-primary placeholder:text-text-muted focus:border-brand-green/50 focus:outline-none focus:ring-2 focus:ring-brand-green/10 transition-all"
+      aria-label={ariaLabel}
+    />
+  );
+}
+
 export default function ProductFilters({
   filters,
   onFilterChange,
   totalCount,
 }: ProductFiltersProps) {
   const t = useTranslations("catalog");
-  const [searchInput, setSearchInput] = useState(filters.search);
-  const filtersRef = useRef(filters);
-  filtersRef.current = filters;
-
-  useEffect(() => {
-    const t = setTimeout(() => {
-      onFilterChange({ ...filtersRef.current, search: searchInput });
-    }, DEBOUNCE_MS);
-    return () => clearTimeout(t);
-  }, [searchInput, onFilterChange]);
-
-  useEffect(() => {
-    setSearchInput(filters.search);
-  }, [filters.search]);
 
   const handleCategory = useCallback(
     (value: string) => {
@@ -67,12 +89,12 @@ export default function ProductFilters({
       {/* Search */}
       <div className="relative w-full md:w-72">
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
-        <input
-          type="search"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+        <SearchInputWithDebounce
+          key={filters.search}
+          initialSearch={filters.search}
+          filters={filters}
+          onFilterChange={onFilterChange}
           placeholder={t("search")}
-          className="w-full rounded-xl border border-surface-3 bg-white py-2.5 pl-10 pr-4 font-body text-sm text-text-primary placeholder:text-text-muted focus:border-brand-green/50 focus:outline-none focus:ring-2 focus:ring-brand-green/10 transition-all"
           aria-label="Search products"
         />
       </div>

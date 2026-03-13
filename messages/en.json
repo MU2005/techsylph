@@ -112,7 +112,9 @@
     "customNo": "No",
     "customNotSure": "Not Sure",
     "notesLabel": "Additional Notes (optional)",
-    "notesPlaceholder": "Specific requirements, designs, colors, deadlines..."
+    "notesPlaceholder": "Specific requirements, designs, colors, deadlines...",
+    "attachmentLabel": "Upload Reference Image or Brief",
+    "customLabelCheckbox": "This is a custom label / private label request"
   },
   "footer": {
     "tagline": "Pakistan's Premier Global Apparel Export Partner",

@@ -14,7 +14,15 @@ const CUSTOMIZATION_LABELS: Record<string, string> = {
   "not-sure": "Not Sure",
 };
 
-function rfqEmailHtml(data: RFQFormData): string {
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function rfqEmailHtml(data: Omit<RFQFormData, "attachment"> & { customLabelRequest?: boolean }): string {
   const customizationLabel = CUSTOMIZATION_LABELS[data.customization] ?? data.customization;
   return `
 <!DOCTYPE html>
@@ -31,6 +39,7 @@ function rfqEmailHtml(data: RFQFormData): string {
     <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Product Categories</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${escapeHtml(data.categories.join(", "))}</td></tr>
     <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Estimated Quantity</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${escapeHtml(data.quantity)}</td></tr>
     <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Customization needed?</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${escapeHtml(customizationLabel)}</td></tr>
+    <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Custom Label Request</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${data.customLabelRequest ? "Yes" : "No"}</td></tr>
     ${data.message ? `<tr><td style="padding: 8px 0; vertical-align: top;"><strong>Additional Notes</strong></td><td style="padding: 8px 0;">${escapeHtml(data.message)}</td></tr>` : ""}
   </table>
 </body>
@@ -38,27 +47,48 @@ function rfqEmailHtml(data: RFQFormData): string {
   `.trim();
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+const schemaWithoutAttachment = rfqSchema.omit({ attachment: true });
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const parsed = rfqSchema.safeParse(body);
+    const contentType = request.headers.get("content-type") ?? "";
+    let data: Omit<RFQFormData, "attachment"> & { customLabelRequest?: boolean };
+    let attachmentBuffer: Buffer | null = null;
+    let attachmentName = "";
+    let attachmentType = "";
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      const dataStr = formData.get("data");
+      if (typeof dataStr !== "string") {
+        return NextResponse.json(
+          { error: "Validation failed", details: null },
+          { status: 400 }
+        );
+      }
+      data = JSON.parse(dataStr) as Omit<RFQFormData, "attachment"> & { customLabelRequest?: boolean };
+      const file = formData.get("attachment") as File | null;
+      if (file && file.size > 0) {
+        const arrayBuffer = await file.arrayBuffer();
+        attachmentBuffer = Buffer.from(arrayBuffer);
+        attachmentName = file.name;
+        attachmentType = file.type || "application/octet-stream";
+      }
+    } else {
+      const body = await request.json();
+      data = body as Omit<RFQFormData, "attachment"> & { customLabelRequest?: boolean };
+    }
+
+    const parsed = schemaWithoutAttachment.safeParse(data);
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Validation failed", details: parsed.error.flatten() },
         { status: 400 }
       );
     }
-    const data = parsed.data;
+    const validated = parsed.data;
 
-    const messageForSanity = `Customization: ${data.customization}. ${data.message || ""}`.trim();
+    const messageForSanity = `Customization: ${validated.customization}. ${validated.customLabelRequest ? "Custom label request. " : ""}${validated.message || ""}`.trim();
 
     let sanitySaved = false;
     try {
@@ -66,14 +96,17 @@ export async function POST(request: Request) {
         _type: "inquiry",
         type: "rfq",
         status: "new",
-        name: data.name,
-        company: data.company,
-        country: data.country,
-        email: data.email,
-        phone: data.phone ?? undefined,
-        products: data.categories,
-        quantity: data.quantity,
+        name: validated.name,
+        company: validated.company,
+        country: validated.country,
+        email: validated.email,
+        phone: validated.phone ?? undefined,
+        products: validated.categories,
+        quantity: validated.quantity,
         message: messageForSanity,
+        hasAttachment: !!attachmentBuffer,
+        attachmentName: attachmentName || undefined,
+        customLabelRequest: validated.customLabelRequest ?? false,
       });
       sanitySaved = true;
     } catch (sanityError) {
@@ -83,12 +116,28 @@ export async function POST(request: Request) {
     let emailSent = false;
     if (process.env.RESEND_API_KEY) {
       try {
-        const { error } = await resend.emails.send({
+        const emailPayload: {
+          from: string;
+          to: string;
+          subject: string;
+          html: string;
+          attachments?: { filename: string; content: Buffer; contentType?: string }[];
+        } = {
           from: FROM_EMAIL,
           to: ADMIN_EMAIL,
-          subject: "New RFQ Submission — TechSylph",
-          html: rfqEmailHtml(data),
-        });
+          subject: `New RFQ${attachmentBuffer ? " (with attachment)" : ""} — ${validated.company ?? validated.name}`,
+          html: rfqEmailHtml(validated),
+        };
+        if (attachmentBuffer && attachmentName) {
+          emailPayload.attachments = [
+            {
+              filename: attachmentName,
+              content: attachmentBuffer,
+              contentType: attachmentType,
+            },
+          ];
+        }
+        const { error } = await resend.emails.send(emailPayload);
         if (!error) emailSent = true;
         else console.error("[RFQ API] Resend error:", error);
       } catch (resendError) {

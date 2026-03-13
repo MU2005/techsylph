@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Config/scripts using CommonJS
+    "sanity.cli.js",
+    "scripts/**",
   ]),
 ]);
 

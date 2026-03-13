@@ -112,7 +112,9 @@
     "customNo": "Non",
     "customNotSure": "Pas sûr",
     "notesLabel": "Notes supplémentaires (optionnel)",
-    "notesPlaceholder": "Exigences, designs, couleurs, délais..."
+    "notesPlaceholder": "Exigences, designs, couleurs, délais...",
+    "attachmentLabel": "Téléverser une image de référence ou un brief",
+    "customLabelCheckbox": "Ceci est une demande d'étiquette personnalisée / private label"
   },
   "footer": {
     "tagline": "Partenaire Mondial N°1 du Pakistan pour l'Export de Vêtements",

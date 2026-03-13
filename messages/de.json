@@ -112,7 +112,9 @@
     "customNo": "Nein",
     "customNotSure": "Unklar",
     "notesLabel": "Zusätzliche Anmerkungen (optional)",
-    "notesPlaceholder": "Anforderungen, Designs, Farben, Fristen..."
+    "notesPlaceholder": "Anforderungen, Designs, Farben, Fristen...",
+    "attachmentLabel": "Referenzbild oder Brief hochladen",
+    "customLabelCheckbox": "Dies ist eine Custom-Label- / Private-Label-Anfrage"
   },
   "footer": {
     "tagline": "Pakistans führender globaler Bekleidungsexport-Partner",

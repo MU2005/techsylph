@@ -1,18 +1,27 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { ChevronDown, Globe } from "lucide-react";
 import { CTAButton } from "@/components/shared/CTAButton";
+import { AnimatedLine } from "@/components/shared/ScrollAnimations";
+import type { SiteSettings } from "@/types/sanity";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
 };
 
-export default function HeroSection() {
-  const locale = useLocale();
+interface HeroSectionProps {
+  settings: SiteSettings | null;
+}
+
+export default function HeroSection({ settings }: HeroSectionProps) {
   const t = useTranslations("hero");
+  const statsProducts = settings?.statsProducts ?? "500+";
+  const statsCountries = settings?.statsCountries ?? "20+";
+  const statsMoq = settings?.statsMoq ?? "50 pcs";
+  const statsTurnaround = settings?.statsTurnaround ?? "4 Weeks";
 
   return (
     <section
@@ -74,34 +83,12 @@ export default function HeroSection() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mt-8 flex flex-wrap gap-4"
           >
-            <CTAButton href={`/${locale}/rfq`} variant="primary" size="lg" className="rounded-xl px-7 py-3.5 text-base shadow-md hover:shadow-lg">
+            <CTAButton href="/rfq" variant="primary" size="lg" className="rounded-xl px-7 py-3.5 text-base shadow-md hover:shadow-lg">
               {t("cta1")}
             </CTAButton>
-            <CTAButton href={`/${locale}/catalog`} variant="outline" size="lg" className="rounded-xl border-surface-3 px-7 py-3.5 text-base">
+            <CTAButton href="/catalog" variant="outline" size="lg" className="rounded-xl border-surface-3 px-7 py-3.5 text-base">
               {t("cta2")}
             </CTAButton>
-          </motion.div>
-
-          {/* Trust row */}
-          <motion.div
-            initial={fadeUp.initial}
-            animate={fadeUp.animate}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-10 flex flex-wrap items-center gap-6"
-          >
-            <span className="flex items-center gap-2">
-              <span className="font-display text-sm font-bold text-text-primary">500+</span>
-              <span className="font-body text-xs text-text-muted">{t("stat1").replace(/^[\d+]+\s*/, "") || "Products"}</span>
-            </span>
-            <span className="h-4 w-px bg-surface-3" aria-hidden />
-            <span className="flex items-center gap-2">
-              <span className="font-display text-sm font-bold text-text-primary">20+</span>
-              <span className="font-body text-xs text-text-muted">{t("stat2").replace(/^[\d+]+\s*/, "") || "Countries"}</span>
-            </span>
-            <span className="h-4 w-px bg-surface-3" aria-hidden />
-            <span className="flex items-center gap-2">
-              <span className="font-display text-sm font-bold text-text-primary">{t("stat3")}</span>
-            </span>
           </motion.div>
         </div>
 
@@ -115,18 +102,18 @@ export default function HeroSection() {
           {/* Main card — clean white card-highlight */}
           <div className="card-highlight relative w-full max-w-sm p-8 rounded-2xl">
             <p className="font-display font-bold text-text-primary">TechSylph Collection</p>
-            <p className="mt-0.5 font-body text-sm text-text-muted">Export Ready — MOQ from 50 pcs</p>
+            <p className="mt-0.5 font-body text-sm text-text-muted">Export Ready — MOQ from {statsMoq}</p>
             <div className="mt-6 space-y-0 border-b border-surface-2 py-3 flex justify-between">
               <span className="font-body text-sm text-text-secondary">Products Available</span>
-              <span className="gradient-text font-display font-bold">500+</span>
+              <span className="gradient-text font-display font-bold">{statsProducts}</span>
             </div>
             <div className="border-b border-surface-2 py-3 flex justify-between">
               <span className="font-body text-sm text-text-secondary">Countries Served</span>
-              <span className="gradient-text font-display font-bold">20+</span>
+              <span className="gradient-text font-display font-bold">{statsCountries}</span>
             </div>
             <div className="border-b border-surface-2 py-3 flex justify-between">
               <span className="font-body text-sm text-text-secondary">Avg Turnaround</span>
-              <span className="gradient-text font-display font-bold">4 Weeks</span>
+              <span className="gradient-text font-display font-bold">{statsTurnaround}</span>
             </div>
             <div className="mt-4">
               <span className="badge-green">Custom Private Label Available</span>
@@ -156,6 +143,20 @@ export default function HeroSection() {
             📦 Low MOQ
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Bottom separator — draws in on scroll */}
+      <div className="absolute bottom-0 left-0 right-0 px-6">
+        <div className="mx-auto max-w-7xl">
+          <AnimatedLine
+            direction="horizontal"
+            className="h-px w-full"
+            origin="center"
+            style={{
+              background: "linear-gradient(90deg, transparent, #047857, #059669, #10B981, #059669, #047857, transparent)",
+            }}
+          />
+        </div>
       </div>
 
       {/* Scroll indicator */}

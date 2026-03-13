@@ -73,7 +73,7 @@ export default async function LookbookPage({
               Or request a personalized catalog
             </p>
             <div className="mt-3">
-              <CTAButton href={`/${locale}/contact`} variant="outline" size="md">
+              <CTAButton href="/contact" variant="outline" size="md">
                 Request Custom Catalog
               </CTAButton>
             </div>

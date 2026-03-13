@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { AnimatedLine } from "@/components/shared/ScrollAnimations";
 
 const NAV_LINKS = [
   { href: "/", key: "home" as const },
@@ -58,25 +59,29 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b border-surface-3 bg-white transition-all duration-300",
-        scrolled && "shadow-sm"
+        "sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm transition-all duration-300 relative",
+        scrolled && "shadow-md shadow-black/5"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-6 md:h-20">
-        {/* Logo — text: Tech + Sylph gradient */}
-        <Link href="/" className="shrink-0 font-display text-xl font-bold text-text-primary">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-8 px-6 md:h-20">
+        {/* Logo — display font, tighter tracking, gradient on Sylph */}
+        <Link
+          href="/"
+          className="shrink-0 font-display text-xl font-extrabold tracking-tight text-text-primary md:text-2xl"
+        >
           Tech<span className="gradient-text">Sylph</span>
         </Link>
 
-        {/* Center nav (desktop) */}
-        <nav className="hidden items-center gap-1 md:flex">
+        {/* Center nav (desktop) — display font, letter-spacing, pill active state */}
+        <nav className="hidden items-center gap-0.5 md:flex">
           {NAV_LINKS.map(({ href, key }) => (
             <Link
               key={href}
               href={href}
               className={cn(
-                "rounded-lg px-3 py-2 font-body text-sm font-medium text-text-secondary transition-colors hover:bg-surface-1 hover:text-text-primary",
-                isActive(href) && "font-semibold text-brand-green"
+                "relative rounded-full px-4 py-2.5 font-display text-sm font-semibold tracking-wide text-text-secondary transition-colors hover:bg-surface-1 hover:text-text-primary",
+                isActive(href) &&
+                  "bg-brand-green-light/60 text-brand-green-dark hover:bg-brand-green-light hover:text-brand-green-dark"
               )}
             >
               {t(key)}
@@ -85,23 +90,23 @@ export default function Navbar() {
         </nav>
 
         {/* Right: locale + CTA + mobile trigger */}
-        <div className="flex items-center gap-3">
-          {/* Language switcher (desktop) — shadcn DropdownMenu */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Language switcher (desktop) — bordered pill */}
           <DropdownMenu>
             <DropdownMenuTrigger
-              className="hidden gap-1.5 rounded-md px-2 py-1.5 text-text-secondary hover:bg-surface-1 hover:text-text-primary md:inline-flex"
+              className="hidden items-center gap-2 rounded-full border border-surface-border bg-surface-0 px-3.5 py-2 font-display text-sm font-semibold text-text-secondary shadow-sm transition-colors hover:border-brand-green/30 hover:bg-surface-1 hover:text-text-primary md:inline-flex"
             >
-              <span>{currentLocale.flag}</span>
+              <span className="text-base leading-none">{currentLocale.flag}</span>
               <span>{currentLocale.label}</span>
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 opacity-70" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-[7rem] bg-white text-text-primary">
               {LOCALES.map((l) => (
                 <DropdownMenuItem
                   key={l.code}
                   className={cn(
-                    "cursor-pointer font-body",
-                    locale === l.code && "font-semibold text-brand-green"
+                    "cursor-pointer font-display font-medium",
+                    locale === l.code && "font-bold text-brand-green"
                   )}
                   onSelect={() => router.replace(pathname, { locale: l.code })}
                 >
@@ -112,11 +117,11 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* CTA (desktop) */}
+          {/* CTA (desktop) — more prominent */}
           <Link
             href="/rfq"
             className={cn(
-              "hidden inline-flex items-center justify-center rounded-xl px-5 py-2.5 font-body text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:opacity-90 hover:shadow-md md:inline-flex",
+              "hidden inline-flex items-center justify-center rounded-full px-6 py-3 font-display text-sm font-bold tracking-wide text-white shadow-md transition-all duration-200 hover:shadow-lg hover:opacity-95 md:inline-flex",
               "gradient-bg"
             )}
           >
@@ -136,16 +141,16 @@ export default function Navbar() {
               className="border-surface-3 bg-white px-6 pt-6 pb-8 data-[side=top]:max-h-[85vh] data-[side=top]:overflow-y-auto"
               showCloseButton
             >
-              <nav className="flex flex-col gap-1 pt-10">
+              <nav className="flex flex-col gap-0.5 pt-10">
                 {NAV_LINKS.map(({ href, key }) => (
                   <Link
                     key={href}
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "rounded-lg px-3 py-3 text-lg font-body font-medium transition-colors",
+                      "rounded-full px-4 py-3 text-lg font-display font-semibold transition-colors",
                       isActive(href)
-                        ? "text-brand-green font-semibold"
+                        ? "bg-brand-green-light/60 text-brand-green-dark"
                         : "text-text-secondary hover:bg-surface-1 hover:text-text-primary"
                     )}
                   >
@@ -155,16 +160,16 @@ export default function Navbar() {
               </nav>
               <div className="mt-8 flex flex-col gap-4 border-t border-surface-3 pt-6">
                 <div className="flex items-center gap-2">
-                  <span className="font-body text-sm text-text-muted">{t("language")}</span>
+                  <span className="font-display text-sm font-semibold text-text-muted">{t("language")}</span>
                   <div className="flex gap-2">
                     {LOCALES.map((l) => (
                       <button
                         key={l.code}
                         type="button"
                         className={cn(
-                          "rounded-lg px-3 py-1.5 font-body text-sm transition-colors",
+                          "rounded-full px-4 py-2 font-display text-sm font-semibold transition-colors",
                           locale === l.code
-                            ? "bg-brand-green text-white font-semibold"
+                            ? "bg-brand-green text-white"
                             : "bg-surface-2 text-text-secondary hover:bg-surface-3"
                         )}
                         onClick={() => {
@@ -181,7 +186,7 @@ export default function Navbar() {
                   href="/rfq"
                   onClick={() => setMobileOpen(false)}
                   className={cn(
-                    "inline-flex justify-center rounded-xl px-6 py-3 font-body font-semibold text-white shadow-sm gradient-bg hover:opacity-90"
+                    "inline-flex justify-center rounded-full px-6 py-3.5 font-display font-bold tracking-wide text-white shadow-md gradient-bg hover:opacity-95"
                   )}
                 >
                   {t("getQuote")}
@@ -190,6 +195,17 @@ export default function Navbar() {
             </SheetContent>
           </Sheet>
         </div>
+      </div>
+      {/* Scroll-animated bottom line (gradient to match brand) */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <AnimatedLine
+          direction="horizontal"
+          className="h-px w-full"
+          origin="center"
+          style={{
+            background: "linear-gradient(90deg, #047857, #059669, #10B981, #059669, #047857)",
+          }}
+        />
       </div>
     </header>
   );
