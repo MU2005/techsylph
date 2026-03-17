@@ -18,6 +18,13 @@ const bodyFont = DM_Sans({
 export const metadata: Metadata = {
   title: "TechSylph",
   description: "TechSylph",
+  icons: {
+    icon: [
+      { url: "/logo-ts-removebg-preview.png", type: "image/png", sizes: "32x32" },
+      { url: "/logo-ts-removebg-preview.png", type: "image/png", sizes: "16x16" },
+    ],
+    apple: "/logo-ts-removebg-preview.png",
+  },
 };
 
 export default function RootLayout({

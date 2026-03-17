@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Menu, ChevronDown } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -64,12 +65,23 @@ export default function Navbar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-8 px-6 md:h-20">
-        {/* Logo — display font, tighter tracking, gradient on Sylph */}
+        {/* Logo */}
         <Link
           href="/"
-          className="shrink-0 font-display text-xl font-extrabold tracking-tight text-text-primary md:text-2xl"
+          className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-90"
+          aria-label="TechSylph — Home"
         >
-          Tech<span className="gradient-text">Sylph</span>
+          <Image
+            src="/logo-ts-removebg-preview.png"
+            alt="TechSylph"
+            width={40}
+            height={40}
+            className="h-9 w-auto md:h-10"
+            priority
+          />
+          <span className="font-display text-xl font-extrabold tracking-tight text-text-primary md:text-2xl">
+            Tech<span className="gradient-text">Sylph</span>
+          </span>
         </Link>
 
         {/* Center nav (desktop) — display font, letter-spacing, pill active state */}

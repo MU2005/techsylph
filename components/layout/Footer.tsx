@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   Instagram,
   Linkedin,
@@ -49,9 +50,18 @@ export default async function Footer() {
         <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Column 1 — Brand */}
           <div className="flex flex-col gap-4">
-            <span className="font-display text-xl font-bold text-white">
-              TechSylph
-            </span>
+            <Link href="/" className="flex items-center gap-2 w-fit">
+              <Image
+                src="/logo-ts-removebg-preview.png"
+                alt="TechSylph"
+                width={44}
+                height={44}
+                className="h-10 w-auto"
+              />
+              <span className="font-display text-xl font-bold text-white">
+                TechSylph
+              </span>
+            </Link>
             <p className="font-body text-sm text-white/60">
               {t("tagline")}
             </p>
