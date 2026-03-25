@@ -9,6 +9,13 @@ interface StatsBarProps {
 }
 
 const STAT_KEYS = ["products", "countries", "moq", "turnaround"] as const;
+const COUNTRY_MARKETS = [
+  { code: "us", name: "USA" },
+  { code: "gb", name: "UK" },
+  { code: "es", name: "Spain" },
+  { code: "nl", name: "Netherlands" },
+  { code: "au", name: "Australia" },
+] as const;
 
 export default function StatsBar({ settings }: StatsBarProps) {
   const t = useTranslations("stats");
@@ -19,25 +26,17 @@ export default function StatsBar({ settings }: StatsBarProps) {
     settings?.statsTurnaround ?? "4 Weeks",
   ];
 
-  const statCell = (value: string, label: string, i: number, variant: "mobile" | "desktop") => (
+  const statCell = (value: string, label: string, i: number) => (
     <motion.div
       key={label}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: i * 0.1 }}
-      className={
-        variant === "mobile"
-          ? `text-center ${i % 2 === 1 ? "border-l border-surface-2" : ""} ${i >= 2 ? "border-t border-surface-2 pt-6" : ""}`
-          : `text-center ${i > 0 ? "border-l border-white/20 pl-8" : ""}`
-      }
+      className="rounded-2xl border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-sm"
     >
       <motion.p
-        className={
-          variant === "mobile"
-            ? "font-display text-2xl font-bold text-text-primary"
-            : "font-display text-3xl font-bold text-white"
-        }
+        className="font-display text-3xl font-bold text-white md:text-4xl"
         animate={{ scale: [1, 1.08, 1] }}
         transition={{
           duration: 2.2,
@@ -48,37 +47,41 @@ export default function StatsBar({ settings }: StatsBarProps) {
       >
         {value}
       </motion.p>
-      <p
-        className={
-          variant === "mobile"
-            ? "mt-0.5 font-body text-xs text-text-muted"
-            : "mt-1 font-body text-sm text-white/70"
-        }
-      >
+      <p className="mt-1 font-body text-xs text-white/80 md:text-sm">
         {label}
       </p>
     </motion.div>
   );
 
   return (
-    <>
-      {/* Mobile: white background, 2x2 grid — no heading, numbers only */}
-      <section className="bg-white md:hidden">
-        <div className="mx-auto max-w-7xl px-6 py-8">
-          <div className="grid grid-cols-2 gap-6">
-            {values.map((value, i) => statCell(value, t(STAT_KEYS[i]), i, "mobile"))}
+    <section className="relative overflow-hidden gradient-bg">
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-48 w-48 rounded-full bg-emerald-200/10 blur-3xl" />
+      <div className="mx-auto max-w-7xl px-6 py-10 md:py-12">
+        <p className="mb-4 text-center font-body text-sm font-semibold tracking-wide text-white/90 md:text-base">
+          {t("marketsHeading")}
+        </p>
+        <div className="flag-loop" role="region" aria-label="Countries we serve">
+          <div className="flag-loop-track flag-loop-track-sway">
+            {COUNTRY_MARKETS.map((country) => (
+              <div key={country.name} className="flag-chip">
+                <img
+                  src={`https://flagcdn.com/24x18/${country.code}.png`}
+                  alt={`${country.name} flag`}
+                  width={24}
+                  height={18}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-[18px] w-6 rounded-[2px] object-cover ring-1 ring-emerald-100"
+                />
+                <span className="font-body text-sm font-semibold text-text-primary">{country.name}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-
-      {/* Desktop: green gradient, single row — no heading, numbers only */}
-      <section className="hidden gradient-bg md:block">
-        <div className="mx-auto max-w-7xl px-6 py-10">
-          <div className="grid grid-cols-4 gap-0">
-            {values.map((value, i) => statCell(value, t(STAT_KEYS[i]), i, "desktop"))}
-          </div>
+        <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+          {values.map((value, i) => statCell(value, t(STAT_KEYS[i]), i))}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

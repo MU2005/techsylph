@@ -1,12 +1,13 @@
 # TechSylph — Bulk Product Import Guide
 
-Import many products into Sanity at once using a CSV file and local images. No changes to the website — this is a developer tooling workflow.
+Import many products into Sanity at once using a CSV file and local images or image URLs. No changes to the website — this is a developer tooling workflow.
 
 ## Prerequisites
 
 - **Sanity CLI** installed globally: `npm install -g @sanity/cli`
 - **Logged into Sanity:** `sanity login`
 - Your `.env.local` has `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET`
+- **Bulk delete script** also needs `SANITY_API_TOKEN` (token with **Editor** or higher — same as in `.env.example`)
 
 ## Step 1 — Prepare your product data
 
@@ -18,12 +19,18 @@ Keep the header row unchanged. For fields with commas (e.g. description), wrap t
 
 ## Step 2 — Add your product images
 
+You can use either of these approaches:
+
+- **Local files (recommended):** put files in `scripts/import/images/` and use filenames in `image1` / `image2` / `image3`.
+- **Remote URLs:** put full `http://` or `https://` URLs directly in `image1` / `image2` / `image3`.
+
 1. Copy all your product image files (JPG or PNG) into:
    ```
    scripts/import/images/
    ```
 2. Name them **exactly** as written in the `image1` / `image2` / `image3` columns.
    - Example: if the CSV has `classic-tee-front.jpg`, put that exact file in `scripts/import/images/`.
+   - Or use a full URL like `https://cdn.example.com/products/classic-tee-front.jpg`.
 
 **Recommended image specs:**
 
@@ -59,11 +66,13 @@ sanity dataset import ./scripts/import/products.ndjson production --replace
 Sanity will:
 
 1. Process the NDJSON and create/update product documents.
-2. **Upload image files** and link them to products. Image paths in the NDJSON use Sanity’s `_sanityAsset` format (`image@file:///...`) with **absolute** paths, so the CLI reads files from `scripts/import/images/` and creates assets automatically.
+2. **Create image assets** and link them to products.
+   - Local files use Sanity’s `_sanityAsset` format (`image@file:///...`) with **absolute** paths.
+   - Remote images use URL assets (`image@https://...`).
 
 Wait for **"Import complete"** in the terminal.
 
-> **Note:** The conversion script writes absolute `file://` paths into the NDJSON so that `sanity dataset import` can find and upload the images. Run the import from the same machine (and same paths) where the images live.
+> **Note:** For local images, the conversion script writes absolute `file://` paths into the NDJSON so that `sanity dataset import` can find and upload the files. Run the import from the same machine (and same paths) where the images live. For remote URL images, Sanity imports directly from the URL.
 
 ## Step 5 — Verify in Studio
 
@@ -78,6 +87,28 @@ You can safely re-run **Step 3** and **Step 4** at any time.
 
 - The `--replace` flag means existing products (same `_id`) are **updated**, not duplicated.
 - Products **not** in the CSV are **not** deleted — only rows in the CSV are created or updated.
+
+## Bulk delete products (optional)
+
+Use `scripts/delete-products.mjs` to remove many product documents at once. **Default is dry-run** — nothing is deleted until you pass `--execute`.
+
+Requires `SANITY_API_TOKEN` in `.env.local`.
+
+```bash
+# Preview: only products whose _id matches product-* (same pattern as CSV import)
+npm run delete:products
+
+# Actually delete those documents
+npm run delete:products -- --execute
+
+# Preview ALL product documents (_type == product), including Studio-created ones
+npm run delete:products -- --all
+
+# Delete ALL product documents (destructive)
+npm run delete:products -- --all --execute
+```
+
+Deleting documents does **not** always remove image assets from the dataset if they are still referenced elsewhere.
 
 ---
 
@@ -96,9 +127,9 @@ You can safely re-run **Step 3** and **Step 4** at any time.
 | **availableSizes**  | No    | Pipe-separated sizes, e.g. `XS\|S\|M\|L\|XL\|XXL`. |
 | **customizable** | Yes      | `true` or `false`. |
 | **featured**      | Yes      | `true` or `false`. Set `true` to show on homepage. |
-| **image1**        | No       | Filename only, e.g. `classic-tee-front.jpg`. File must be in `scripts/import/images/`. |
-| **image2**        | No       | Second image filename. |
-| **image3**        | No       | Third image filename. |
+| **image1**        | No       | Local filename (e.g. `classic-tee-front.jpg`) or full image URL (`https://...`). |
+| **image2**        | No       | Second local filename or full URL. |
+| **image3**        | No       | Third local filename or full URL. |
 | **metaTitle**     | No       | SEO title; falls back to **name** if empty. |
 | **metaDescription** | No    | SEO description; falls back to **description** if empty. |
 
@@ -108,12 +139,12 @@ You can safely re-run **Step 3** and **Step 4** at any time.
 
 | Issue | What to do |
 |-------|------------|
-| **"Image not found" warning** | Check that the filename in the CSV matches exactly the file in `scripts/import/images/` (case and extension). |
+| **"Image not found" warning** | For local images: check that the filename in the CSV matches exactly the file in `scripts/import/images/` (case and extension). For URL images: make sure the value starts with `http://` or `https://`. |
 | **"Invalid category" warning** | Category must be one of: `tshirts`, `hoodies`, `activewear`, `custom`. |
 | **Duplicate slug error** | Each product must have a unique slug. Change the slug in the CSV for one of the rows. |
 | **Sanity auth error** | Run `sanity login` and complete the browser login. |
 | **CSV parse error** | Ensure the file is saved as CSV (comma-separated). Fields containing commas must be wrapped in double quotes. |
-| **"File does not exist" on import** | The NDJSON uses absolute `file://` paths. Run the import from the same machine where you ran `npm run import:products` so paths point to your real `scripts/import/images/` folder. Use `--allow-failing-assets` only to skip missing images and still import documents. |
+| **"File does not exist" on import** | This applies to local images only (`file://` paths). Run the import from the same machine where you ran `npm run import:products` so paths point to your real `scripts/import/images/` folder. Use `--allow-failing-assets` only to skip missing images and still import documents. |
 
 ---
 

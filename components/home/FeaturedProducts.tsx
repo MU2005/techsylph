@@ -10,13 +10,6 @@ import { AnimatedLine } from "@/components/shared/ScrollAnimations";
 import { urlFor } from "@/sanity/lib/image";
 import type { Product } from "@/types/sanity";
 
-const CATEGORY_LABELS: Record<Product["category"], string> = {
-  tshirts: "T-Shirts & Basics",
-  hoodies: "Hoodies & Sweatshirts",
-  activewear: "Activewear",
-  custom: "Custom / Private Label",
-};
-
 interface FeaturedProductsProps {
   products: Product[];
 }
@@ -86,7 +79,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
                   </div>
                   <div className="flex flex-1 flex-col gap-2 p-5">
                     <span className="font-body text-xs font-semibold uppercase tracking-wide text-brand-green">
-                      {CATEGORY_LABELS[product.category]}
+                      {product.category?.title ?? tCatalog("uncategorized")}
                     </span>
                     <h3 className="font-display text-lg font-semibold text-text-primary">
                       {product.name}

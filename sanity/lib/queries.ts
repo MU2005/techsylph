@@ -1,17 +1,24 @@
 export const PRODUCTS_QUERY = `*[_type == "product"] | order(_createdAt desc) {
-  _id, name, slug, category, description, moq,
+  _id, name, slug, "category": category->{title, "slug": slug.current}, description, moq,
   badge, images, fabricDetails, availableColors, availableSizes,
   customizable, featured
 }`;
 
 export const PRODUCT_BY_SLUG_QUERY = `*[_type == "product" && slug.current == $slug][0] {
-  _id, name, slug, category, description, moq,
+  _id, name, slug, "category": category->{title, "slug": slug.current}, description, moq,
   badge, images, fabricDetails, availableColors,
   availableSizes, customizable, featured
 }`;
 
 export const FEATURED_PRODUCTS_QUERY = `*[_type == "product" && featured == true][0...6] {
-  _id, name, slug, category, description, moq, badge, images, customizable, featured
+  _id, name, slug, "category": category->{title, "slug": slug.current}, description, moq, badge, images, customizable, featured
+}`;
+
+export const CATEGORIES_QUERY = `*[_type == "category"] | order(order asc, title asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  order
 }`;
 
 export const BLOG_POSTS_QUERY = `*[_type == "blogPost"] | order(publishedAt desc) {
@@ -34,11 +41,6 @@ export const TESTIMONIALS_QUERY = `*[_type == "testimonial"] | order(_createdAt 
 
 export const FAQ_QUERY = `*[_type == "faqItem"] | order(order asc) {
   _id, question, answer, order
-}`;
-
-export const INQUIRIES_QUERY = `*[_type == "inquiry"] | order(_createdAt desc) {
-  _id, name, company, country, email, phone,
-  message, type, status, _createdAt
 }`;
 
 export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {

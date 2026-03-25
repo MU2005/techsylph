@@ -12,8 +12,9 @@ import type { CustomLabelData } from "@/types/sanity";
 export const metadata: Metadata = {
   title: "Custom Private Label — OEM & ODM Manufacturing",
   description:
-    "Launch your clothing brand with TechSylph's private label service. Custom labels, packaging, OEM & ODM from Pakistan. MOQ from 50 pcs.",
+    "Launch your clothing brand with TechSylph's private label service. Custom labels, packaging, OEM & ODM from Sialkot, Pakistan. MOQ from 50 pcs.",
 };
+export const revalidate = 300;
 
 const DEFAULT_CUSTOMIZATIONS: NonNullable<CustomLabelData["customizations"]> = [
   {
@@ -116,7 +117,7 @@ export default async function CustomLabelPage() {
   const subtitle = data?.heroSubtitle ?? "Full custom label and private label manufacturing from Pakistan. MOQ from 50 pieces.";
   const moqNote = data?.moqNote ?? "Minimum order from 50 pieces per style";
   const turnaroundNote =
-    data?.turnaroundNote ?? "Typical production: 3–4 weeks after sample approval";
+    data?.turnaroundNote ?? "Typical production: 15–20 business days after sample approval";
   const customizations =
     Array.isArray(data?.customizations) && data.customizations.length > 0
       ? data.customizations
@@ -232,7 +233,7 @@ export default async function CustomLabelPage() {
             Ready to Start Your Custom Order?
           </h2>
           <p className="mt-2 font-body text-text-secondary">
-            Get a quote in 24 hours — no commitment needed.
+            Get a factory-direct quote within 24 hours — no commitment needed.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             <CTAButton

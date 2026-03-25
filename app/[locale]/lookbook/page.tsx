@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { CTAButton } from "@/components/shared/CTAButton";
 import { FileDown, Download } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 export const metadata: Metadata = {
   title: "Download Catalog — TechSylph Lookbook",
   description:
     "Download TechSylph's free product catalog PDF. Full apparel collection with specs, MOQ details, and custom options.",
 };
+export const revalidate = 3600;
 
 const PILLS = [
   "📄 PDF Format",
@@ -16,17 +18,12 @@ const PILLS = [
   "💼 B2B Pricing Guide",
 ];
 
-export default async function LookbookPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-
+export default async function LookbookPage() {
   return (
     <div className="min-h-screen bg-white">
       <header className="mx-auto max-w-7xl px-6 pt-32 pb-12">
         <SectionHeading
+          as="h1"
           label="Product Catalog"
           title="Download Our"
           highlight="Lookbook"
@@ -76,6 +73,15 @@ export default async function LookbookPage({
               <CTAButton href="/contact" variant="outline" size="md">
                 Request Custom Catalog
               </CTAButton>
+            </div>
+          </div>
+          <div className="mt-8 border-t border-surface-3 pt-8 text-left">
+            <h2 className="font-display text-xl font-bold text-text-primary">Next best actions</h2>
+            <div className="mt-3 flex flex-wrap gap-4 font-body text-sm">
+              <Link href="/catalog" className="text-brand-green hover:underline">Explore live catalog pages</Link>
+              <Link href="/custom-label" className="text-brand-green hover:underline">Review custom private label options</Link>
+              <Link href="/how-it-works" className="text-brand-green hover:underline">Understand the order workflow</Link>
+              <Link href="/rfq" className="text-brand-green hover:underline">Request a wholesale quote</Link>
             </div>
           </div>
         </div>

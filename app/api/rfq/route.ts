@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { rfqSchema, type RFQFormData } from "@/lib/validations";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { reportApiError } from "@/lib/monitoring";
 import { writeClient } from "@/sanity/lib/writeClient";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -48,9 +50,28 @@ function rfqEmailHtml(data: Omit<RFQFormData, "attachment"> & { customLabelReque
 }
 
 const schemaWithoutAttachment = rfqSchema.omit({ attachment: true });
+const ALLOWED_ATTACHMENT_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/pdf",
+]);
+const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const limit = checkRateLimit(`rfq:${ip}`);
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(limit.retryAfterSeconds) },
+        }
+      );
+    }
+
     const contentType = request.headers.get("content-type") ?? "";
     let data: Omit<RFQFormData, "attachment"> & { customLabelRequest?: boolean };
     let attachmentBuffer: Buffer | null = null;
@@ -66,9 +87,41 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-      data = JSON.parse(dataStr) as Omit<RFQFormData, "attachment"> & { customLabelRequest?: boolean };
+      try {
+        data = JSON.parse(dataStr) as Omit<RFQFormData, "attachment"> & {
+          customLabelRequest?: boolean;
+        };
+      } catch {
+        return NextResponse.json(
+          {
+            error: "Validation failed",
+            details: { data: ["Invalid multipart data payload"] },
+          },
+          { status: 400 }
+        );
+      }
       const file = formData.get("attachment") as File | null;
       if (file && file.size > 0) {
+        if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
+          return NextResponse.json(
+            {
+              error: "Validation failed",
+              details: { attachment: ["File must be under 10MB"] },
+            },
+            { status: 400 }
+          );
+        }
+        if (!ALLOWED_ATTACHMENT_TYPES.has(file.type)) {
+          return NextResponse.json(
+            {
+              error: "Validation failed",
+              details: {
+                attachment: ["Only JPG, PNG, WEBP, or PDF files allowed"],
+              },
+            },
+            { status: 400 }
+          );
+        }
         const arrayBuffer = await file.arrayBuffer();
         attachmentBuffer = Buffer.from(arrayBuffer);
         attachmentName = file.name;
@@ -110,7 +163,7 @@ export async function POST(request: Request) {
       });
       sanitySaved = true;
     } catch (sanityError) {
-      console.error("[RFQ API] Sanity create error:", sanityError);
+      reportApiError(sanityError, "RFQ API", { stage: "sanity_create" });
     }
 
     let emailSent = false;
@@ -139,21 +192,28 @@ export async function POST(request: Request) {
         }
         const { error } = await resend.emails.send(emailPayload);
         if (!error) emailSent = true;
-        else console.error("[RFQ API] Resend error:", error);
+        else reportApiError(error, "RFQ API", { stage: "resend_send_error" });
       } catch (resendError) {
-        console.error("[RFQ API] Resend exception:", resendError);
+        reportApiError(resendError, "RFQ API", { stage: "resend_send_exception" });
       }
     }
 
     if (sanitySaved || emailSent) {
-      return NextResponse.json({ success: true });
+      return NextResponse.json({
+        success: true,
+        partial: !sanitySaved || !emailSent,
+        services: {
+          sanitySaved,
+          emailSent,
+        },
+      });
     }
     return NextResponse.json(
       { error: "Could not save RFQ or send notification. Please try again." },
       { status: 500 }
     );
   } catch (e) {
-    console.error("[RFQ API]", e);
+    reportApiError(e, "RFQ API", { stage: "unexpected" });
     return NextResponse.json(
       { error: "An unexpected error occurred." },
       { status: 500 }

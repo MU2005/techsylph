@@ -70,14 +70,18 @@ export default async function Footer() {
             </p>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://www.instagram.com/techsylph"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white/50 transition-colors hover:text-white"
                 aria-label="Instagram"
               >
                 <Instagram className="size-[18px]" />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/techsylph"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white/50 transition-colors hover:text-white"
                 aria-label="LinkedIn"
               >
@@ -167,13 +171,13 @@ export default async function Footer() {
               © 2025 TechSylph. {t("rights")}
             </p>
             <div className="flex gap-4 font-body text-xs text-white/30">
-              <a href="#" className="transition-colors hover:text-white/50">
+              <Link href="/privacy-policy" className="transition-colors hover:text-white/50">
                 {t("privacy")}
-              </a>
+              </Link>
               <span>·</span>
-              <a href="#" className="transition-colors hover:text-white/50">
+              <Link href="/terms-of-service" className="transition-colors hover:text-white/50">
                 {t("terms")}
-              </a>
+              </Link>
             </div>
           </div>
         </div>

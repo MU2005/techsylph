@@ -25,15 +25,8 @@ export default defineType({
     defineField({
       name: "category",
       title: "Category",
-      type: "string",
-      options: {
-        list: [
-          { title: "T-Shirts & Basics", value: "tshirts" },
-          { title: "Hoodies & Sweatshirts", value: "hoodies" },
-          { title: "Activewear", value: "activewear" },
-          { title: "Custom / Private Label", value: "custom" },
-        ],
-      },
+      type: "reference",
+      to: [{ type: "category" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -103,6 +96,17 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: "name", subtitle: "category", media: "images.0" },
+    select: {
+      title: "name",
+      categoryTitle: "category.title",
+      media: "images.0",
+    },
+    prepare({ title, categoryTitle, media }) {
+      return {
+        title,
+        subtitle: categoryTitle || "No category selected",
+        media,
+      };
+    },
   },
 });

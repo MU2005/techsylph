@@ -6,8 +6,9 @@ import { HowItWorksStepRow } from "@/components/home/HowItWorksStepRow";
 export const metadata: Metadata = {
   title: "How It Works — Order Process",
   description:
-    "See how easy it is to order from TechSylph. 6 simple steps from inquiry to delivery. Get a quote in 48 hours.",
+    "See how easy it is to order from TechSylph. Simple steps from inquiry to delivery. Get a quote in 24 hours.",
 };
+export const revalidate = 3600;
 
 const STEPS = [
   {
@@ -22,8 +23,8 @@ const STEPS = [
   },
   {
     title: "Receive Your Custom Quote",
-    desc: "Our team reviews your requirements and sends a detailed quote within 48 hours — including pricing, production timeline, and available options.",
-    time: "Within 48 hours",
+    desc: "Our team reviews your requirement and sends a clear quote within 24 hours — including pricing, timeline, and sample options.",
+    time: "Within 24 hours",
   },
   {
     title: "Approve Sample & Confirm",
@@ -32,31 +33,26 @@ const STEPS = [
   },
   {
     title: "Production Begins",
-    desc: "Full production starts after order confirmation and deposit. We keep you updated throughout with production status reports.",
-    time: "2–4 weeks",
+    desc: "Full production starts after order confirmation and 50% advance payment. We keep you updated at every stage.",
+    time: "15–20 business days",
   },
   {
     title: "Shipment & Delivery",
-    desc: "Your order is quality-checked, packed, and shipped to your location with full export documentation and tracking.",
-    time: "5–14 days shipping",
+    desc: "Your order is quality-checked, packed, and shipped door-to-door with full export documentation and tracking.",
+    time: "USA: 5–8 days | UK/EU: 4–7 days",
   },
 ];
 
-export default async function HowItWorksPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-
+export default async function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-white">
       <header className="mx-auto max-w-7xl px-6 pt-32 pb-12">
         <SectionHeading
+          as="h1"
           label="The Process"
           title="How To Order From"
           highlight="TechSylph"
-          subtitle="From first inquiry to delivery at your door — here's exactly how it works."
+          subtitle="From first inquiry to final delivery, we keep the process simple, transparent, and friendly."
         />
       </header>
 
@@ -65,6 +61,15 @@ export default async function HowItWorksPage({
           {STEPS.map((step, i) => (
             <HowItWorksStepRow key={step.title} step={step} index={i} />
           ))}
+        </div>
+        <div className="mt-8 card-base p-6">
+          <h2 className="font-display text-2xl font-bold text-text-primary">Plan your next step</h2>
+          <div className="mt-4 flex flex-wrap gap-4 font-body text-sm">
+            <Link href="/catalog" className="text-brand-green hover:underline">Browse catalog by product type</Link>
+            <Link href="/custom-label" className="text-brand-green hover:underline">See private label customization options</Link>
+            <Link href="/faq" className="text-brand-green hover:underline">Review MOQ, sample, and shipping FAQs</Link>
+            <Link href="/contact" className="text-brand-green hover:underline">Talk to our sourcing team</Link>
+          </div>
         </div>
       </div>
 
@@ -92,7 +97,7 @@ export default async function HowItWorksPage({
               Ready to Get Started?
             </h2>
             <p className="relative mx-auto mt-4 max-w-xl font-body text-base leading-relaxed text-white/85 md:text-lg">
-              Submit your first RFQ and receive a detailed quote within 48 hours. No commitment required.
+              Submit your first RFQ and receive a detailed quote within 24 hours. No commitment required.
             </p>
             <div
               className="relative mx-auto mt-2 h-1 w-20 rounded-full opacity-80"

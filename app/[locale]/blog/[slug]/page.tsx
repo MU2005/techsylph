@@ -7,14 +7,17 @@ import { BLOG_POST_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { Link } from "@/i18n/navigation";
 import PortableTextContent from "@/components/shared/PortableTextContent";
+import JsonLd from "@/components/shared/JsonLd";
 import type { BlogPost } from "@/types/sanity";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
+export const revalidate = 300;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const post = await client.fetch<BlogPost | null>(BLOG_POST_BY_SLUG_QUERY, {
     slug,
   });
@@ -30,6 +33,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    alternates: {
+      canonical: `/${locale}/blog/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description,
@@ -40,19 +46,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export async function generateStaticParams() {
   const locales = ["en", "fr", "de"];
-  const posts = await client.fetch<{ slug: string }[]>(
+  const posts = await client.fetch<Array<{ slug?: string | { current?: string | null } | null }>>(
     `*[_type == "blogPost"]{ "slug": slug.current }`
   );
+  const slugs = (posts ?? [])
+    .map((p) => {
+      if (typeof p.slug === "string") return p.slug;
+      if (p.slug && typeof p.slug === "object" && typeof p.slug.current === "string") {
+        return p.slug.current;
+      }
+      return null;
+    })
+    .filter((slug): slug is string => typeof slug === "string" && slug.length > 0);
   return locales.flatMap((locale) =>
-    (posts ?? []).map((p) => ({
+    slugs.map((slug) => ({
       locale,
-      slug: p.slug,
+      slug,
     }))
   );
 }
 
 export default async function BlogSlugPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const t = await getTranslations("blog");
   const post = await client.fetch<BlogPost | null>(BLOG_POST_BY_SLUG_QUERY, {
     slug,
@@ -65,9 +80,31 @@ export default async function BlogSlugPage({ params }: PageProps) {
   const coverImageUrl = post.coverImage
     ? urlFor(post.coverImage).width(1200).height(630).url()
     : null;
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt ?? "TechSylph blog article.",
+    datePublished: post.publishedAt,
+    author: post.author ? { "@type": "Person", name: post.author } : { "@type": "Organization", name: "TechSylph" },
+    publisher: { "@type": "Organization", name: "TechSylph" },
+    mainEntityOfPage: `https://techsylph.shop/${locale}/blog/${slug}`,
+    image: coverImageUrl ? [coverImageUrl] : undefined,
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `https://techsylph.shop/${locale}` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `https://techsylph.shop/${locale}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://techsylph.shop/${locale}/blog/${slug}` },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <div className="mx-auto max-w-7xl px-6 pt-32 pb-0">
         <nav
           className="font-body text-sm text-text-muted"
@@ -113,7 +150,7 @@ export default async function BlogSlugPage({ params }: PageProps) {
           <div className="relative mt-6 aspect-video overflow-hidden rounded-2xl bg-surface-1">
             <Image
               src={coverImageUrl}
-              alt=""
+              alt={`${post.title} cover image`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 672px"

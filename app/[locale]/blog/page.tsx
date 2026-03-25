@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description:
     "Read TechSylph's blog for apparel export guides, manufacturing insights, and industry news from Pakistan.",
 };
+export const revalidate = 300;
 
 export default async function BlogPage() {
   const t = await getTranslations("blog");
@@ -28,6 +29,7 @@ export default async function BlogPage() {
     <div className="min-h-screen bg-white">
       <section className="mx-auto max-w-7xl px-6 pt-32 pb-12">
         <SectionHeading
+          as="h1"
           label={t("pageLabel")}
           title={t("pageTitle")}
           highlight={t("pageHighlight")}
@@ -57,7 +59,7 @@ export default async function BlogPage() {
                     {imageUrl ? (
                       <Image
                         src={imageUrl}
-                        alt=""
+                        alt={post.title}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

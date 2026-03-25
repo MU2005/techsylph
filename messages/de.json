@@ -36,7 +36,8 @@
     "products": "Verfügbare Produkte",
     "countries": "Bediente Länder",
     "moq": "Mindestbestellmenge",
-    "turnaround": "Durchschn. Lieferzeit"
+    "turnaround": "Durchschn. Lieferzeit",
+    "marketsHeading": "Wir bedienen aktiv Kunden in diesen Märkten"
   },
   "categories": {
     "label": "Unsere Produkte",
@@ -90,7 +91,17 @@
     "sent": "Nachricht Gesendet! ✓",
     "successMsg": "Nachricht erfolgreich gesendet! Wir melden uns innerhalb von 24–48 Stunden.",
     "errorMsg": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-    "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut."
+    "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
+    "contactInfo": "Kontaktinformationen",
+    "emailUs": "E-Mail an uns",
+    "whatsAppLabel": "WhatsApp",
+    "whatsAppHours": "Verfügbar Mo-Sa, 9-18 Uhr PKT",
+    "locationLabel": "Standort",
+    "locationSubtext": "Pakistans Textil-Produktionszentrum",
+    "responseTimeLabel": "Antwortzeit",
+    "responseTimeValue": "Innerhalb von 24 Stunden",
+    "responseTimeSubtext": "Für alle Anfragen und Angebote",
+    "followUs": "Folgen Sie uns"
   },
   "rfq": {
     "label": "Angebot Anfordern",
@@ -123,7 +134,10 @@
     "notesLabel": "Zusätzliche Anmerkungen (optional)",
     "notesPlaceholder": "Anforderungen, Designs, Farben, Fristen...",
     "attachmentLabel": "Referenzbild oder Brief hochladen",
-    "customLabelCheckbox": "Dies ist eine Custom-Label- / Private-Label-Anfrage"
+    "customLabelCheckbox": "Dies ist eine Custom-Label- / Private-Label-Anfrage",
+    "attachmentHint": "(optional - JPG, PNG, PDF, max 10MB)",
+    "attachmentDropzone": "Klicken zum Hochladen oder Datei hierher ziehen",
+    "attachmentRemove": "Entfernen"
   },
   "footer": {
     "tagline": "Pakistans führender globaler Bekleidungsexport-Partner",
@@ -165,7 +179,44 @@
     "categoryCustom": "Eigenmarke / Maßanfertigung",
     "relatedLabel": "Weitere Produkte",
     "relatedTitle": "Das könnte Ihnen auch",
-    "relatedHighlight": "gefallen"
+    "relatedHighlight": "gefallen",
+    "uncategorized": "Ohne Kategorie"
+  },
+  "catalogPage": {
+    "breadcrumb": "Startseite / Katalog",
+    "label": "Unsere Kollektion",
+    "title": "Produkt",
+    "highlight": "Katalog",
+    "subtitle": "Entdecken Sie unser vollständiges exportfertiges Bekleidungssortiment. Keine Preise angezeigt - senden Sie eine Anfrage für ein individuelles Großhandelsangebot."
+  },
+  "rfqPage": {
+    "label": "Angebot anfordern",
+    "title": "Erhalten Sie Ihr",
+    "highlight": "Großhandelsangebot",
+    "subtitle": "Teilen Sie uns Ihre Anforderungen mit und wir senden Ihnen innerhalb von 24 Stunden ein detailliertes Angebot. Unverbindlich.",
+    "statResponse": "Antwort in 24h",
+    "statCommitment": "Keine Verpflichtung",
+    "statMoq": "Ab 50 Stk."
+  },
+  "productDetail": {
+    "imageComingSoon": "Produktbild folgt in Kürze",
+    "uncategorized": "Ohne Kategorie",
+    "fabric": "Stoff",
+    "availableOnRequest": "Auf Anfrage verfügbar",
+    "minOrder": "Mindestbestellung",
+    "pieces": "Stück",
+    "contactUs": "Kontaktieren Sie uns",
+    "customizable": "Anpassbar",
+    "customizableYes": "Ja - Eigenmarke verfügbar",
+    "customizableNo": "Nur Standard",
+    "availableSizes": "Verfügbare Größen",
+    "availableColors": "Verfügbare Farben",
+    "privateLabelAvailable": "Eigenmarke verfügbar",
+    "privateLabelDescription": "Dieses Produkt kann mit Ihrem Branding, individuellen Etiketten und Verpackungen gefertigt werden.",
+    "requestQuoteForProduct": "Angebot für dieses Produkt anfordern",
+    "qualityGuaranteed": "Qualität garantiert",
+    "globalShipping": "Weltweiter Versand",
+    "fastTurnaround": "Schnelle Bearbeitung"
   },
   "faq": {
     "label": "FAQ",

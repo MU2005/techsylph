@@ -4,18 +4,13 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Target, Eye, Heart, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us — Pakistan Apparel Export",
+  title: "About Us — Private Label Manufacturer in Sialkot",
   description:
-    "Learn about TechSylph — Pakistan's premier B2B apparel export brand based in Sialkot. Our story, mission, and manufacturing capabilities.",
+    "Learn about TechSylph — a friendly, factory-direct private label apparel manufacturer based in Sialkot, Pakistan.",
 };
+export const revalidate = 3600;
 
-export default async function AboutPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-
+export default async function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
@@ -23,10 +18,11 @@ export default async function AboutPage({
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div className="space-y-6">
             <SectionHeading
+              as="h1"
               label="Our Story"
-              title="Pakistan's Premier"
-              highlight="Apparel Exporter"
-              subtitle="We connect world-class international buyers with Pakistan's finest textile manufacturing — delivering quality, consistency, and trust on every order."
+              title="From Sialkot to"
+              highlight="the World"
+              subtitle="TechSylph is a factory-direct private label manufacturer in Sialkot, Pakistan. We help brands launch and scale with clear communication, honest pricing, and reliable production."
             />
             <div className="mt-8 flex gap-8">
               <div>
@@ -55,8 +51,8 @@ export default async function AboutPage({
               &ldquo;
             </span>
             <p className="font-display text-2xl font-bold leading-snug text-text-primary">
-              We don&apos;t just manufacture garments — we build lasting
-              partnerships with buyers worldwide.
+              We&apos;re not a middleman. We&apos;re your manufacturing partner —
+              and we treat your brand like our own.
             </p>
             <p className="mt-4 font-body text-sm text-text-muted">
               — TechSylph Founding Team
@@ -79,17 +75,17 @@ export default async function AboutPage({
               {
                 icon: Target,
                 title: "Our Mission",
-                text: "To make Pakistan's world-class textile manufacturing accessible to international buyers of all sizes — from boutique retailers to large distributors.",
+                text: "To be the most trusted private label apparel partner for brands worldwide, with factory-direct quality and a smooth client experience from inquiry to delivery.",
               },
               {
                 icon: Eye,
                 title: "Our Vision",
-                text: "To become the most trusted name in Pakistani apparel exports, known for quality, transparency, and long-term buyer relationships.",
+                text: "To build a globally recognized manufacturing brand known for reliable execution, honest communication, and long-term partnerships.",
               },
               {
                 icon: Heart,
                 title: "Our Values",
-                text: "Quality first. Honest communication. Fair pricing. On-time delivery. Every order, every time.",
+                text: "Craft first, transparency, partnership over transaction, accessibility through MOQ from 50, and accountability in every order.",
               },
             ].map((item) => (
               <div key={item.title} className="card-base p-6">
@@ -117,14 +113,14 @@ export default async function AboutPage({
                 🇵🇰 Made in Pakistan
               </p>
               <h2 className="mt-2 font-display text-3xl font-bold text-text-primary">
-                Why Pakistan?
+                Why Sialkot?
               </h2>
               <ul className="mt-6 space-y-4">
                 {[
                   "3rd largest cotton producer in the world",
                   "100+ years of textile manufacturing heritage",
-                  "Competitive pricing without compromising quality",
-                  "Government-supported export infrastructure",
+                  "Global reputation for garment and leather craftsmanship",
+                  "Competitive factory-direct pricing without compromising quality",
                 ].map((point, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-brand-green" />
@@ -175,7 +171,7 @@ export default async function AboutPage({
               Partner With Us Today
             </h2>
             <p className="relative mx-auto mt-4 max-w-xl font-body text-base leading-relaxed text-white/85 md:text-lg">
-              Join hundreds of international buyers sourcing premium apparel from Pakistan&apos;s finest manufacturers.
+              Share your requirements and get a factory-direct quote within 24 hours. MOQ starts at 50 pieces per style.
             </p>
             <div
               className="relative mx-auto mt-6 h-px w-24 opacity-60"

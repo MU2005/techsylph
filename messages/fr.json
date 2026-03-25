@@ -36,7 +36,8 @@
     "products": "Produits Disponibles",
     "countries": "Pays Desservis",
     "moq": "Quantité Minimale",
-    "turnaround": "Délai Moyen"
+    "turnaround": "Délai Moyen",
+    "marketsHeading": "Nous servons activement des clients sur ces marchés"
   },
   "categories": {
     "label": "Nos Produits",
@@ -90,7 +91,17 @@
     "sent": "Message Envoyé ! ✓",
     "successMsg": "Message envoyé avec succès ! Nous vous répondrons sous 24 à 48 heures.",
     "errorMsg": "Une erreur s'est produite. Veuillez réessayer.",
-    "networkError": "Erreur réseau. Veuillez réessayer."
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "contactInfo": "Informations de contact",
+    "emailUs": "Envoyez-nous un e-mail",
+    "whatsAppLabel": "WhatsApp",
+    "whatsAppHours": "Disponible lun-sam, 9h-18h PKT",
+    "locationLabel": "Localisation",
+    "locationSubtext": "Pôle textile du Pakistan",
+    "responseTimeLabel": "Temps de réponse",
+    "responseTimeValue": "Sous 24 heures",
+    "responseTimeSubtext": "Pour toutes les demandes et devis",
+    "followUs": "Suivez-nous"
   },
   "rfq": {
     "label": "Demander un Devis",
@@ -123,7 +134,10 @@
     "notesLabel": "Notes supplémentaires (optionnel)",
     "notesPlaceholder": "Exigences, designs, couleurs, délais...",
     "attachmentLabel": "Téléverser une image de référence ou un brief",
-    "customLabelCheckbox": "Ceci est une demande d'étiquette personnalisée / private label"
+    "customLabelCheckbox": "Ceci est une demande d'étiquette personnalisée / private label",
+    "attachmentHint": "(optionnel - JPG, PNG, PDF, max 10MB)",
+    "attachmentDropzone": "Cliquez pour téléverser ou glisser-déposer",
+    "attachmentRemove": "Supprimer"
   },
   "footer": {
     "tagline": "Partenaire Mondial N°1 du Pakistan pour l'Export de Vêtements",
@@ -165,7 +179,44 @@
     "categoryCustom": "Étiquette privée / Sur mesure",
     "relatedLabel": "Plus de produits",
     "relatedTitle": "Vous aimerez aussi",
-    "relatedHighlight": "aimer"
+    "relatedHighlight": "aimer",
+    "uncategorized": "Non classé"
+  },
+  "catalogPage": {
+    "breadcrumb": "Accueil / Catalogue",
+    "label": "Notre Collection",
+    "title": "Produit",
+    "highlight": "Catalogue",
+    "subtitle": "Explorez notre gamme complète de vêtements prêts à l'export. Aucun prix affiché - envoyez une demande pour un devis en gros personnalisé."
+  },
+  "rfqPage": {
+    "label": "Demander un devis",
+    "title": "Obtenez votre",
+    "highlight": "devis en gros",
+    "subtitle": "Remplissez vos besoins et nous vous répondrons avec un devis détaillé sous 24 heures. Sans engagement.",
+    "statResponse": "Réponse en 24h",
+    "statCommitment": "Sans engagement",
+    "statMoq": "Dès 50 pcs"
+  },
+  "productDetail": {
+    "imageComingSoon": "Image du produit bientôt disponible",
+    "uncategorized": "Non classé",
+    "fabric": "Tissu",
+    "availableOnRequest": "Disponible sur demande",
+    "minOrder": "Commande min.",
+    "pieces": "pièces",
+    "contactUs": "Contactez-nous",
+    "customizable": "Personnalisable",
+    "customizableYes": "Oui - Étiquette privée disponible",
+    "customizableNo": "Standard uniquement",
+    "availableSizes": "Tailles disponibles",
+    "availableColors": "Couleurs disponibles",
+    "privateLabelAvailable": "Étiquette privée disponible",
+    "privateLabelDescription": "Ce produit peut être fabriqué avec votre marque, vos étiquettes personnalisées et votre emballage.",
+    "requestQuoteForProduct": "Demander un devis pour ce produit",
+    "qualityGuaranteed": "Qualité garantie",
+    "globalShipping": "Expédition mondiale",
+    "fastTurnaround": "Délai rapide"
   },
   "faq": {
     "label": "FAQ",

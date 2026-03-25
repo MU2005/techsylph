@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { contactSchema, type ContactFormData } from "@/lib/validations";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { reportApiError } from "@/lib/monitoring";
 import { writeClient } from "@/sanity/lib/writeClient";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -38,6 +40,18 @@ function escapeHtml(s: string): string {
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const limit = checkRateLimit(`contact:${ip}`);
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(limit.retryAfterSeconds) },
+        }
+      );
+    }
+
     const body = await request.json();
     const parsed = contactSchema.safeParse(body);
     if (!parsed.success) {
@@ -63,7 +77,7 @@ export async function POST(request: Request) {
       });
       sanitySaved = true;
     } catch (sanityError) {
-      console.error("[Contact API] Sanity create error:", sanityError);
+      reportApiError(sanityError, "Contact API", { stage: "sanity_create" });
     }
 
     let emailSent = false;
@@ -76,21 +90,28 @@ export async function POST(request: Request) {
           html: contactEmailHtml(data),
         });
         if (!error) emailSent = true;
-        else console.error("[Contact API] Resend error:", error);
+        else reportApiError(error, "Contact API", { stage: "resend_send_error" });
       } catch (resendError) {
-        console.error("[Contact API] Resend exception:", resendError);
+        reportApiError(resendError, "Contact API", { stage: "resend_send_exception" });
       }
     }
 
     if (sanitySaved || emailSent) {
-      return NextResponse.json({ success: true });
+      return NextResponse.json({
+        success: true,
+        partial: !sanitySaved || !emailSent,
+        services: {
+          sanitySaved,
+          emailSent,
+        },
+      });
     }
     return NextResponse.json(
       { error: "Could not save inquiry or send notification. Please try again." },
       { status: 500 }
     );
   } catch (e) {
-    console.error("[Contact API]", e);
+    reportApiError(e, "Contact API", { stage: "unexpected" });
     return NextResponse.json(
       { error: "An unexpected error occurred." },
       { status: 500 }

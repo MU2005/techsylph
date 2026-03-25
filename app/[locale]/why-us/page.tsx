@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { WhyUsFeatureCard } from "@/components/home/WhyUsFeatureCard";
+import { Link } from "@/i18n/navigation";
 
 export const metadata: Metadata = {
   title: "Why Choose TechSylph — Our Advantage",
   description:
-    "Why 100s of international buyers choose TechSylph. Low MOQ, quality guarantee, fast turnaround, direct communication. Compare us to competitors.",
+    "Why international buyers choose TechSylph: factory-direct quality, MOQ from 50, 24-hour quote response, and door-to-door delivery.",
 };
+export const revalidate = 3600;
 
 const FEATURES = [
   {
@@ -19,8 +21,8 @@ const FEATURES = [
   {
     num: "02",
     icon: "TrendingDown",
-    title: "Competitive MOQ",
-    desc: "Start from just 50 pieces per style. No massive commitments required. Scale as your business grows.",
+    title: "MOQ from 50 Pieces",
+    desc: "Start at 50 pieces per style so you can test confidently, then scale with the same manufacturing partner.",
     stat: "From 50 pcs",
   },
   {
@@ -40,9 +42,9 @@ const FEATURES = [
   {
     num: "05",
     icon: "Timer",
-    title: "Fast Turnaround",
-    desc: "4 weeks average from sample approval to delivery. Rush orders available on select products.",
-    stat: "~4 Weeks",
+    title: "Fast, Clear Timelines",
+    desc: "Quote response within 24 hours and production in 15–20 business days for standard orders.",
+    stat: "24h + 15–20 Days",
   },
   {
     num: "06",
@@ -55,11 +57,12 @@ const FEATURES = [
 
 const COMPARISON_ROWS = [
   { feature: "MOQ", techsylph: "50 pieces", typical: "500–1000 pieces" },
-  { feature: "Turnaround", techsylph: "~4 weeks", typical: "8–12 weeks" },
+  { feature: "Quote Response", techsylph: "Within 24 hours", typical: "2–5 business days" },
+  { feature: "Production Lead Time", techsylph: "15–20 business days", typical: "30–60 days" },
   { feature: "Communication", techsylph: "Direct (WhatsApp/Email)", typical: "Through agents" },
   { feature: "Private Label", techsylph: "✅ Full service", typical: "Limited", check: true, cross: true },
   { feature: "Quality Check", techsylph: "✅ Every order", typical: "Inconsistent", check: true, cross: true },
-  { feature: "Sample", techsylph: "✅ Available", typical: "Extra cost", check: true, cross: true },
+  { feature: "Sample", techsylph: "✅ Available (cost reimbursed)", typical: "Extra cost", check: true, cross: true },
 ];
 
 export default async function WhyUsPage() {
@@ -67,10 +70,11 @@ export default async function WhyUsPage() {
     <div className="min-h-screen bg-white">
       <header className="mx-auto max-w-7xl px-6 pt-32 pb-12">
         <SectionHeading
+          as="h1"
           label="Why Choose Us"
           title="The TechSylph"
           highlight="Advantage"
-          subtitle="Here's why hundreds of international buyers choose TechSylph as their apparel sourcing partner."
+          subtitle="Here's why brands choose us as a friendly, factory-direct private label manufacturing partner."
         />
       </header>
 
@@ -79,6 +83,15 @@ export default async function WhyUsPage() {
           {FEATURES.map((f, i) => (
             <WhyUsFeatureCard key={f.title} feature={f} index={i} />
           ))}
+        </div>
+        <div className="mt-8 card-base p-6">
+          <h2 className="font-display text-2xl font-bold text-text-primary">Compare options and move forward</h2>
+          <div className="mt-4 flex flex-wrap gap-4 font-body text-sm">
+            <Link href="/custom-label" className="text-brand-green hover:underline">Private label and OEM capabilities</Link>
+            <Link href="/catalog" className="text-brand-green hover:underline">Browse wholesale-ready products</Link>
+            <Link href="/how-it-works" className="text-brand-green hover:underline">View ordering process and timelines</Link>
+            <Link href="/rfq" className="text-brand-green hover:underline">Request a quote in 24 hours</Link>
+          </div>
         </div>
       </div>
 

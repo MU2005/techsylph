@@ -17,6 +17,8 @@ In **Vercel → Project → Settings → Environment Variables**, add:
 | `ADMIN_EMAIL` | Yes | Where form submissions are sent |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | No | WhatsApp link (e.g. `+923225594022`) |
 | `RESEND_FROM` | No | Sender address (default: Resend onboarding) |
+| `SENTRY_DSN` | No (recommended) | Error tracking for API and runtime failures |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | No (recommended) | Google Analytics ID for lead conversion tracking |
 
 Use the same values as in `.env.local` (do not commit `.env.local`).
 

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { useTranslations } from "next-intl";
 import { urlFor } from "@/sanity/lib/image";
 import type { SiteSettings } from "@/types/sanity";
 
@@ -93,6 +94,7 @@ interface FeaturedCategoriesProps {
 export default function FeaturedCategories({
   categories,
 }: FeaturedCategoriesProps) {
+  const tCategories = useTranslations("categories");
   const list =
     Array.isArray(categories) && categories.length > 0
       ? categories
@@ -102,9 +104,9 @@ export default function FeaturedCategories({
     <section className="section-padding section-alt">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          title="Premium Apparel"
-          highlight="Categories"
-          subtitle="From basics to activewear — explore our full range of export-ready garments manufactured in Pakistan."
+          title={tCategories("title")}
+          highlight={tCategories("highlight")}
+          subtitle={tCategories("subtitle")}
           centered
         />
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -157,7 +159,7 @@ export default function FeaturedCategories({
                     {cat.description ?? ""}
                   </p>
                   <span className="mt-auto font-body text-sm font-semibold text-brand-green hover:underline">
-                    Explore →
+                    {tCategories("explore")}
                   </span>
                 </Link>
               </motion.div>

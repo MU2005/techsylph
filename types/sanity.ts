@@ -4,11 +4,21 @@ export interface SanityImage {
   hotspot?: { x: number; y: number };
 }
 
+export interface Category {
+  _id: string;
+  title: string;
+  slug: string;
+  order?: number;
+}
+
 export interface Product {
   _id: string;
   name: string;
   slug: { current: string };
-  category: "tshirts" | "hoodies" | "activewear" | "custom";
+  category?: {
+    title: string;
+    slug: string;
+  };
   description?: string;
   moq?: number;
   badge?: string;
@@ -18,6 +28,10 @@ export interface Product {
   availableSizes?: string[];
   customizable?: boolean;
   featured?: boolean;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+  };
 }
 
 export interface BlogPost {
@@ -31,6 +45,10 @@ export interface BlogPost {
   excerpt?: string;
   /** Portable Text blocks from Sanity */
   body?: unknown[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+  };
 }
 
 export interface Testimonial {
@@ -86,4 +104,22 @@ export interface CustomLabelData {
     description?: string;
     duration?: string;
   }[];
+}
+
+export interface Inquiry {
+  _id: string;
+  name?: string;
+  company?: string;
+  country?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+  type?: "contact" | "rfq";
+  status?: "new" | "in-progress" | "resolved";
+  products?: string[];
+  quantity?: string;
+  hasAttachment?: boolean;
+  attachmentName?: string;
+  customLabelRequest?: boolean;
+  _createdAt?: string;
 }

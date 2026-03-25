@@ -4,16 +4,10 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Tag, ShieldCheck, Globe, PackageCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { CTAButton } from "@/components/shared/CTAButton";
 import { urlFor } from "@/sanity/lib/image";
 import type { Product } from "@/types/sanity";
-
-const CATEGORY_LABELS: Record<Product["category"], string> = {
-  tshirts: "T-Shirts & Basics",
-  hoodies: "Hoodies & Sweatshirts",
-  activewear: "Activewear",
-  custom: "Custom / Private Label",
-};
 
 type ProductDetailContentProps = {
   product: Product;
@@ -22,6 +16,7 @@ type ProductDetailContentProps = {
 export default function ProductDetailContent({
   product,
 }: ProductDetailContentProps) {
+  const t = useTranslations("productDetail");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const images = product.images ?? [];
   const mainImage = images[activeImageIndex];
@@ -49,7 +44,7 @@ export default function ProductDetailContent({
                 TS
               </span>
               <span className="mt-2 font-body text-sm text-text-muted">
-                Product Image Coming Soon
+                {t("imageComingSoon")}
               </span>
             </div>
           )}
@@ -74,7 +69,7 @@ export default function ProductDetailContent({
               >
                 <Image
                   src={urlFor(img).width(160).url()}
-                  alt=""
+                  alt={`${product.name} thumbnail ${i + 1}`}
                   width={80}
                   height={80}
                   className="size-full object-cover"
@@ -92,7 +87,7 @@ export default function ProductDetailContent({
         transition={{ duration: 0.4, delay: 0.1 }}
       >
         <span className="font-body text-sm font-semibold uppercase tracking-widest text-brand-green">
-          {CATEGORY_LABELS[product.category]}
+          {product.category?.title ?? t("uncategorized")}
         </span>
         <h1 className="mt-2 font-display text-4xl font-bold leading-tight text-text-primary md:text-5xl">
           {product.name}
@@ -109,28 +104,28 @@ export default function ProductDetailContent({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="font-body text-xs uppercase tracking-wide text-text-muted">
-                Fabric
+                {t("fabric")}
               </p>
               <p className="mt-0.5 font-body text-sm font-medium text-text-primary">
-                {product.fabricDetails || "Available on request"}
+                {product.fabricDetails || t("availableOnRequest")}
               </p>
             </div>
             <div>
               <p className="font-body text-xs uppercase tracking-wide text-text-muted">
-                Min. Order
+                {t("minOrder")}
               </p>
               <p className="mt-0.5 font-body text-sm font-medium text-text-primary">
-                {product.moq ? `${product.moq} pieces` : "Contact us"}
+                {product.moq ? `${product.moq} ${t("pieces")}` : t("contactUs")}
               </p>
             </div>
             <div className="col-span-2">
               <p className="font-body text-xs uppercase tracking-wide text-text-muted">
-                Customizable
+                {t("customizable")}
               </p>
               <p className="mt-0.5 font-body text-sm font-medium text-text-primary">
                 {product.customizable
-                  ? "Yes — Private label available"
-                  : "Standard only"}
+                  ? t("customizableYes")
+                  : t("customizableNo")}
               </p>
             </div>
           </div>
@@ -140,7 +135,7 @@ export default function ProductDetailContent({
         {product.availableSizes && product.availableSizes.length > 0 && (
           <div className="mt-6">
             <p className="font-body text-xs uppercase tracking-wide text-text-muted">
-              Available Sizes
+              {t("availableSizes")}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {product.availableSizes.map((size) => (
@@ -159,7 +154,7 @@ export default function ProductDetailContent({
         {product.availableColors && product.availableColors.length > 0 && (
           <div className="mt-4">
             <p className="font-body text-xs uppercase tracking-wide text-text-muted">
-              Available Colors
+              {t("availableColors")}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {product.availableColors.map((color) => (
@@ -181,11 +176,10 @@ export default function ProductDetailContent({
               <Tag className="mt-0.5 size-5 shrink-0 text-brand-green" />
               <div>
                 <p className="font-display text-sm font-semibold text-text-primary">
-                  Private Label Available
+                  {t("privateLabelAvailable")}
                 </p>
                 <p className="mt-1 font-body text-sm text-text-secondary">
-                  This product can be manufactured with your branding, custom
-                  labels, and packaging.
+                  {t("privateLabelDescription")}
                 </p>
               </div>
             </div>
@@ -200,7 +194,7 @@ export default function ProductDetailContent({
             size="lg"
             className="w-full sm:flex-1"
           >
-            Request a Quote for This Product
+            {t("requestQuoteForProduct")}
           </CTAButton>
           <CTAButton
             href="/contact"
@@ -208,7 +202,7 @@ export default function ProductDetailContent({
             size="lg"
             className="w-full sm:flex-1"
           >
-            Contact Us
+            {t("contactUs")}
           </CTAButton>
         </div>
 
@@ -216,15 +210,15 @@ export default function ProductDetailContent({
         <div className="mt-6 flex flex-wrap gap-4">
           <span className="flex items-center gap-1.5 font-body text-xs text-text-muted">
             <ShieldCheck className="size-4 text-brand-green" />
-            Quality Guaranteed
+            {t("qualityGuaranteed")}
           </span>
           <span className="flex items-center gap-1.5 font-body text-xs text-text-muted">
             <Globe className="size-4 text-brand-green" />
-            Global Shipping
+            {t("globalShipping")}
           </span>
           <span className="flex items-center gap-1.5 font-body text-xs text-text-muted">
             <PackageCheck className="size-4 text-brand-green" />
-            Fast Turnaround
+            {t("fastTurnaround")}
           </span>
         </div>
       </motion.div>

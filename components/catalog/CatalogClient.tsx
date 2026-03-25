@@ -8,13 +8,14 @@ import { useTranslations } from "next-intl";
 import ProductCard from "./ProductCard";
 import ProductFilters, { type FilterState } from "./ProductFilters";
 import { CTAButton } from "@/components/shared/CTAButton";
-import type { Product } from "@/types/sanity";
+import type { Category, Product } from "@/types/sanity";
 
 type CatalogClientProps = {
   products: Product[];
+  categories: Category[];
 };
 
-export default function CatalogClient({ products }: CatalogClientProps) {
+export default function CatalogClient({ products, categories }: CatalogClientProps) {
   const t = useTranslations("catalog");
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get("category") ?? "";
@@ -34,7 +35,7 @@ export default function CatalogClient({ products }: CatalogClientProps) {
         (p.description?.toLowerCase().includes(filters.search.toLowerCase()) ??
           false);
       const matchCategory =
-        !effectiveCategory || p.category === effectiveCategory;
+        !effectiveCategory || p.category?.slug === effectiveCategory;
       const matchCustom = !filters.customizable || p.customizable === true;
       return matchSearch && matchCategory && matchCustom;
     });
@@ -46,6 +47,7 @@ export default function CatalogClient({ products }: CatalogClientProps) {
         filters={{ ...filters, category: effectiveCategory }}
         onFilterChange={setFilters}
         totalCount={filtered.length}
+        categoryOptions={categories.map((c) => ({ slug: c.slug, title: c.title }))}
       />
       {filtered.length === 0 ? (
         <div className="rounded-2xl bg-surface-1 p-12 text-center">

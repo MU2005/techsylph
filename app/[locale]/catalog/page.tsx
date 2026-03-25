@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { client } from "@/sanity/lib/client";
-import { PRODUCTS_QUERY } from "@/sanity/lib/queries";
+import { CATEGORIES_QUERY, PRODUCTS_QUERY } from "@/sanity/lib/queries";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { CatalogClient } from "@/components/catalog";
 import { Link } from "@/i18n/navigation";
-import type { Product } from "@/types/sanity";
+import type { Category, Product } from "@/types/sanity";
 
 export const metadata: Metadata = {
   title: "Product Catalog — Apparel Export",
   description:
     "Browse TechSylph's full apparel catalog. T-shirts, hoodies, activewear, and custom private label. No MOQ shown — request a quote.",
 };
+export const revalidate = 300;
 
 export default async function CatalogPage() {
+  const tCatalogPage = await getTranslations("catalogPage");
   let products: Product[] = [];
+  let categories: Category[] = [];
   try {
-    const data = await client.fetch<Product[]>(PRODUCTS_QUERY);
-    products = Array.isArray(data) ? data : [];
+    const [productsData, categoriesData] = await Promise.all([
+      client.fetch<Product[]>(PRODUCTS_QUERY),
+      client.fetch<Category[]>(CATEGORIES_QUERY),
+    ]);
+    products = Array.isArray(productsData) ? productsData : [];
+    categories = Array.isArray(categoriesData) ? categoriesData : [];
   } catch {
     products = [];
+    categories = [];
   }
 
   return (
@@ -29,20 +38,21 @@ export default async function CatalogPage() {
           href="/"
           className="font-body text-sm text-text-muted hover:text-text-primary"
         >
-          Home / Catalog
+          {tCatalogPage("breadcrumb")}
         </Link>
         <SectionHeading
-          label="Our Collection"
-          title="Product"
-          highlight="Catalog"
-          subtitle="Explore our full range of export-ready apparel. No prices shown — submit an inquiry for a custom wholesale quote."
+          as="h1"
+          label={tCatalogPage("label")}
+          title={tCatalogPage("title")}
+          highlight={tCatalogPage("highlight")}
+          subtitle={tCatalogPage("subtitle")}
           centered={false}
         />
       </section>
 
       {/* Catalog grid + filters */}
       <div className="mx-auto max-w-7xl px-6 pb-20">
-        <CatalogClient products={products} />
+        <CatalogClient products={products} categories={categories} />
       </div>
     </div>
   );

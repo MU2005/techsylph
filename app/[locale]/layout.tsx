@@ -4,11 +4,16 @@ import { getMessages } from "next-intl/server";
 import { Navbar, Footer, WhatsAppButton } from "@/components/layout";
 import JsonLd from "@/components/shared/JsonLd";
 
-// TODO: Add a real 1200x630 OG image at public/og-image.jpg
-// This is the image shown when links are shared on social media
-// Design it with TechSylph logo + tagline on dark background
+type LayoutProps = {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+};
 
-export const metadata: Metadata = {
+export async function generateMetadata({
+  params,
+}: LayoutProps): Promise<Metadata> {
+  await params;
+  return {
   metadataBase: new URL("https://techsylph.shop"),
   title: {
     default: "TechSylph — Global Apparel Export from Pakistan",
@@ -62,7 +67,16 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-};
+  alternates: {
+    languages: {
+      en: "/en",
+      fr: "/fr",
+      de: "/de",
+      "x-default": "/en",
+    },
+  },
+  };
+}
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -88,18 +102,21 @@ const organizationSchema = {
   ],
 };
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
-}) {
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "TechSylph",
+  url: "https://techsylph.shop",
+  inLanguage: ["en", "fr", "de"],
+};
+
+export default async function LocaleLayout({ children, params }: LayoutProps) {
   const { locale } = await params;
   const messages = await getMessages();
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <JsonLd data={organizationSchema} />
+      <JsonLd data={websiteSchema} />
       <Navbar />
       <main>{children}</main>
       <WhatsAppButton />

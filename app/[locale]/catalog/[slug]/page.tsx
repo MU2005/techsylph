@@ -15,8 +15,10 @@ type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
+export const revalidate = 300;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const product = await client.fetch<Product | null>(PRODUCT_BY_SLUG_QUERY, {
     slug,
   });
@@ -33,6 +35,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    alternates: {
+      canonical: `/${locale}/catalog/${slug}`,
+    },
     openGraph: {
       title: product.name,
       description,
@@ -41,25 +46,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-const RELATED_QUERY = `*[_type == "product" && category == $category && slug.current != $slug][0...3] {
-  _id, name, slug, category, description, moq, badge, images, customizable
+const RELATED_QUERY = `*[_type == "product" && category->slug.current == $categorySlug && slug.current != $slug][0...3] {
+  _id, name, slug, "category": category->{title, "slug": slug.current}, description, moq, badge, images, customizable
 }`;
 
 export async function generateStaticParams() {
   const locales = ["en", "fr", "de"];
-  const products = await client.fetch<{ slug: string }[]>(
+  const products = await client.fetch<Array<{ slug?: string | { current?: string | null } | null }>>(
     `*[_type == "product"]{ "slug": slug.current }`
   );
+  const slugs = (products ?? [])
+    .map((p) => {
+      if (typeof p.slug === "string") return p.slug;
+      if (p.slug && typeof p.slug === "object" && typeof p.slug.current === "string") {
+        return p.slug.current;
+      }
+      return null;
+    })
+    .filter((slug): slug is string => typeof slug === "string" && slug.length > 0);
   return locales.flatMap((locale) =>
-    (products ?? []).map((p) => ({
+    slugs.map((slug) => ({
       locale,
-      slug: p.slug,
+      slug,
     }))
   );
 }
 
 export default async function CatalogSlugPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const tNav = await getTranslations("nav");
   const tCatalog = await getTranslations("catalog");
 
@@ -101,9 +115,18 @@ export default async function CatalogSlugPage({ params }: PageProps) {
       },
     },
   };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `https://techsylph.shop/${locale}` },
+      { "@type": "ListItem", position: 2, name: "Catalog", item: `https://techsylph.shop/${locale}/catalog` },
+      { "@type": "ListItem", position: 3, name: product.name, item: `https://techsylph.shop/${locale}/catalog/${slug}` },
+    ],
+  };
 
   const related = await client.fetch<Product[]>(RELATED_QUERY, {
-    category: product.category,
+    categorySlug: product.category?.slug ?? "",
     slug,
   });
   const relatedList = Array.isArray(related) ? related : [];
@@ -111,6 +134,7 @@ export default async function CatalogSlugPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-white">
       <JsonLd data={productSchema} />
+      <JsonLd data={breadcrumbSchema} />
       {/* Breadcrumb */}
       <div className="mx-auto max-w-7xl px-6 pt-32 pb-0">
         <nav className="font-body text-sm text-text-muted" aria-label="Breadcrumb">

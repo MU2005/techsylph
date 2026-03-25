@@ -10,20 +10,20 @@ const STEPS = [
   {
     number: "01",
     icon: Search,
-    title: "Browse & Inquire",
-    desc: "Explore our catalog and submit an inquiry or RFQ form with your requirements.",
+    title: "Share Your Requirement",
+    desc: "Send your product needs, target quantity, and customization details through RFQ or contact form.",
   },
   {
     number: "02",
     icon: FileText,
-    title: "Get Your Quote",
-    desc: "We respond within 48 hours with a custom quote, samples, and production timeline.",
+    title: "Get Quote in 24 Hours",
+    desc: "We reply with factory-direct pricing, sample plan, and timeline so you can decide quickly.",
   },
   {
     number: "03",
     icon: PackageCheck,
-    title: "Produce & Ship",
-    desc: "Approve the sample, confirm the order. We manufacture and ship to your door.",
+    title: "Sample, Produce, Deliver",
+    desc: "Approve your sample, confirm the order, and we handle production, QC, and door-to-door shipment.",
   },
 ];
 

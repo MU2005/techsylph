@@ -25,7 +25,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
 
   return (
     <section
-      className="relative flex flex-col overflow-x-hidden bg-white pt-24 md:pt-32 lg:min-h-screen lg:items-center"
+      className="relative flex flex-col overflow-x-hidden bg-white pt-24 pb-8 md:pt-32 md:pb-12 lg:min-h-[calc(100vh-5rem)] lg:pb-16 lg:items-center"
       style={{
         background: `
           radial-gradient(circle at 20% 50%, #D1FAE5 0%, transparent 50%),
@@ -35,7 +35,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
       }}
     >
       {/* Single column on mobile: hero content then video; two columns on lg */}
-      <div className="flex w-full flex-1 flex-col gap-10 lg:flex-initial lg:justify-center">
+      <div className="flex w-full flex-1 flex-col gap-6 md:gap-8 lg:gap-10 lg:flex-initial lg:justify-center">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
           {/* Left column — text */}
           <div className="flex flex-col">
@@ -92,6 +92,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
               {t("cta2")}
             </CTAButton>
           </motion.div>
+
         </div>
 
         {/* Right column — card + floating chips (hidden on mobile) */}
@@ -103,8 +104,8 @@ export default function HeroSection({ settings }: HeroSectionProps) {
         >
           {/* Main card — clean white card-highlight */}
           <div className="card-highlight relative w-full max-w-sm p-8 rounded-2xl">
-            <p className="font-display font-bold text-text-primary">TechSylph Collection</p>
-            <p className="mt-0.5 font-body text-sm text-text-muted">Export Ready — MOQ from {statsMoq}</p>
+            <p className="font-display font-bold text-text-primary">TechSylph Private Label</p>
+            <p className="mt-0.5 font-body text-sm text-text-muted">Factory Direct from Sialkot — MOQ from {statsMoq}</p>
             <div className="mt-6 space-y-0 border-b border-surface-2 py-3 flex justify-between">
               <span className="font-body text-sm text-text-secondary">Products Available</span>
               <span className="gradient-text font-display font-bold">{statsProducts}</span>
@@ -118,7 +119,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
               <span className="gradient-text font-display font-bold">{statsTurnaround}</span>
             </div>
             <div className="mt-4">
-              <span className="badge-green">Custom Private Label Available</span>
+              <span className="badge-green">Quote Response: Within 24 Hours</span>
             </div>
           </div>
 
@@ -128,21 +129,21 @@ export default function HeroSection({ settings }: HeroSectionProps) {
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
-            ✓ Quality Guaranteed
+            ✓ Multi-point QC
           </motion.div>
           <motion.div
             className="card-base absolute bottom-12 right-0 flex px-3 py-2 text-xs text-text-primary shadow-sm md:right-4"
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           >
-            🚢 Global Shipping
+            🚢 Door-to-door shipping
           </motion.div>
           <motion.div
             className="card-base absolute right-0 top-16 flex px-3 py-2 text-xs text-text-primary shadow-sm md:right-8"
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           >
-            📦 Low MOQ
+            📦 MOQ from 50 pcs
           </motion.div>
         </motion.div>
         </div>
@@ -155,6 +156,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
                 ? settings.heroVideoUrl
                 : "/PinDown.io_@zcstreetwear_1773387807.mp4"
             }
+            preload="metadata"
             autoPlay
             muted
             loop
@@ -165,8 +167,8 @@ export default function HeroSection({ settings }: HeroSectionProps) {
         </div>
       </div>
 
-      {/* Bottom separator — draws in on scroll */}
-      <div className="absolute bottom-0 left-0 right-0 px-6">
+      {/* Bottom separator — stays in normal flow to avoid overlap/gap glitches */}
+      <div className="mt-6 px-6 md:mt-8 lg:mt-10">
         <div className="mx-auto max-w-7xl">
           <AnimatedLine
             direction="horizontal"

@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { contactSchema, type ContactFormData } from "@/lib/validations";
+import { trackLeadSubmission } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const inputClass =
@@ -14,6 +16,8 @@ const errorClass = "mt-1 font-body text-xs text-red-500";
 
 export function ContactForm() {
   const t = useTranslations("contact");
+  const locale = useLocale();
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -21,6 +25,7 @@ export function ContactForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -42,6 +47,13 @@ export function ContactForm() {
         return;
       }
       setIsSuccess(true);
+      reset();
+      trackLeadSubmission({
+        formType: "contact",
+        locale,
+        path: pathname,
+        partial: Boolean(json?.partial),
+      });
     } catch {
       setErrorMessage(t("networkError"));
     } finally {

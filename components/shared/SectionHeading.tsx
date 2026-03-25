@@ -7,6 +7,7 @@ type SectionHeadingProps = {
   subtitle?: string;
   centered?: boolean;
   light?: boolean;
+  as?: "h1" | "h2";
   className?: string;
 };
 
@@ -17,12 +18,15 @@ export function SectionHeading({
   subtitle,
   centered = false,
   light = false,
+  as = "h2",
   className,
 }: SectionHeadingProps) {
   const titleParts =
     highlight && title.includes(highlight)
       ? title.split(highlight)
       : [title];
+
+  const HeadingTag = as;
 
   return (
     <div
@@ -39,7 +43,7 @@ export function SectionHeading({
           </span>
         </div>
       )}
-      <h2
+      <HeadingTag
         className={cn(
           "font-display text-3xl font-bold text-text-primary md:text-4xl",
           light && "text-text-primary"
@@ -54,7 +58,7 @@ export function SectionHeading({
         ) : (
           title
         )}
-      </h2>
+      </HeadingTag>
       {subtitle && (
         <p
           className={cn(

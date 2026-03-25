@@ -9,18 +9,18 @@ import { AnimatedLine } from "@/components/shared/ScrollAnimations";
 const FEATURES = [
   {
     icon: ShieldCheck,
-    title: "Uncompromising Quality",
-    desc: "Every garment passes multi-point QC inspection before shipment. We meet international export standards consistently.",
+    title: "Factory-Direct Quality",
+    desc: "We are your direct manufacturing partner in Sialkot. Every order goes through multi-point QC before dispatch.",
   },
   {
     icon: Globe,
-    title: "Global Export Ready",
-    desc: "Experienced in shipping to US, EU, Middle East & beyond. Full documentation, compliance, and logistics support.",
+    title: "Door-to-Door Worldwide",
+    desc: "We ship to the USA, UK/EU, Australia, and the Middle East with export documentation and tracking handled by our team.",
   },
   {
     icon: Layers,
-    title: "Low MOQ, High Flexibility",
-    desc: "Start from 50 pieces per style. Scale up as your business grows. Custom sizing, colors, and labeling available.",
+    title: "MOQ from 50, Easy to Scale",
+    desc: "Start with 50 pieces per style and grow confidently. We support private label customization as your brand scales.",
   },
 ];
 

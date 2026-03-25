@@ -12,11 +12,11 @@
     "language": "Language"
   },
   "hero": {
-    "badge": "Trusted by Buyers in 20+ Countries",
-    "line1": "Your Global",
-    "line2": "Apparel Export",
-    "line3": "Partner",
-    "subtitle": "Pakistan-based premium apparel manufacturing for international retailers, wholesale buyers, and fashion brands worldwide.",
+    "badge": "Direct Manufacturer in Sialkot, Pakistan",
+    "line1": "From Sialkot",
+    "line2": "to the World",
+    "line3": "Wearing Your Name",
+    "subtitle": "Friendly, factory-direct private label manufacturing for growing and established brands. MOQ from 50 pieces, clear updates, and door-to-door delivery.",
     "cta1": "Request a Quote",
     "cta2": "Browse Catalog",
     "stat1": "500+ Products",
@@ -25,9 +25,9 @@
   },
   "ctaBanner": {
     "overline": "Ready to source?",
-    "title1": "Start your global export",
-    "title2": "journey today",
-    "subtitle": "Join hundreds of international buyers sourcing premium apparel from Pakistan's finest manufacturers.",
+    "title1": "Build your next collection",
+    "title2": "with a real factory partner",
+    "subtitle": "From first inquiry to final delivery, we keep it simple, friendly, and transparent for your team.",
     "cta1": "Request a quote",
     "cta2": "Browse catalog"
   },
@@ -36,7 +36,8 @@
     "products": "Products Available",
     "countries": "Countries Served",
     "moq": "Minimum Order Qty",
-    "turnaround": "Avg. Turnaround Time"
+    "turnaround": "Avg. Turnaround Time",
+    "marketsHeading": "We actively serve clients in these markets"
   },
   "categories": {
     "label": "Our Products",
@@ -61,7 +62,7 @@
     "label": "The Process",
     "title": "How It Works",
     "highlight": "Works",
-    "subtitle": "Getting started with TechSylph is simple."
+    "subtitle": "Simple steps, clear timelines, and updates at every stage."
   },
   "whyUs": {
     "label": "Why TechSylph",
@@ -72,7 +73,7 @@
     "label": "Get In Touch",
     "title": "Let's Start a",
     "highlight": "Conversation",
-    "subtitle": "Have a question or ready to place an order? We respond within 24–48 hours.",
+    "subtitle": "Have a question or ready to place an order? We respond within 24 hours.",
     "name": "Full Name",
     "company": "Company Name",
     "country": "Country",
@@ -88,19 +89,29 @@
     "send": "Send Message",
     "sending": "Sending...",
     "sent": "Message Sent! ✓",
-    "successMsg": "Message sent successfully! We'll get back to you within 24–48 hours.",
+    "successMsg": "Message sent successfully! We'll get back to you within 24 hours.",
     "errorMsg": "Something went wrong. Please try again.",
-    "networkError": "Network error. Please try again."
+    "networkError": "Network error. Please try again.",
+    "contactInfo": "Contact Information",
+    "emailUs": "Email Us",
+    "whatsAppLabel": "WhatsApp",
+    "whatsAppHours": "Available Mon-Sat, 9am-6pm PKT",
+    "locationLabel": "Location",
+    "locationSubtext": "Pakistan's textile manufacturing hub",
+    "responseTimeLabel": "Response Time",
+    "responseTimeValue": "Within 24 hours",
+    "responseTimeSubtext": "For all inquiries and quotes",
+    "followUs": "Follow Us"
   },
   "rfq": {
     "label": "Request a Quote",
     "title": "Get Your Custom",
     "highlight": "Wholesale Quote",
-    "subtitle": "Fill in your requirements and we'll respond with a detailed quote within 48 hours.",
+    "subtitle": "Fill in your requirements and we'll respond with a detailed quote within 24 hours.",
     "submit": "Submit RFQ",
     "submitting": "Submitting...",
     "submitted": "RFQ Submitted! ✓",
-    "successMsg": "RFQ submitted successfully! We'll get back to you with a quote within 48 hours.",
+    "successMsg": "RFQ submitted successfully! We'll get back to you with a quote within 24 hours.",
     "errorMsg": "Something went wrong. Please try again.",
     "networkError": "Network error. Please try again.",
     "nameLabel": "Full Name",
@@ -123,11 +134,14 @@
     "notesLabel": "Additional Notes (optional)",
     "notesPlaceholder": "Specific requirements, designs, colors, deadlines...",
     "attachmentLabel": "Upload Reference Image or Brief",
-    "customLabelCheckbox": "This is a custom label / private label request"
+    "customLabelCheckbox": "This is a custom label / private label request",
+    "attachmentHint": "(optional - JPG, PNG, PDF, max 10MB)",
+    "attachmentDropzone": "Click to upload or drag and drop",
+    "attachmentRemove": "Remove"
   },
   "footer": {
-    "tagline": "Pakistan's Premier Global Apparel Export Partner",
-    "description": "Connecting world-class buyers with Pakistan's finest textile manufacturing.",
+    "tagline": "From Sialkot to the World — Wearing Your Name.",
+    "description": "Factory-direct private label apparel manufacturing with MOQ from 50 pieces and worldwide door-to-door delivery.",
     "company": "Company",
     "products": "Products",
     "contact": "Contact",
@@ -165,7 +179,44 @@
     "categoryCustom": "Custom / Private Label",
     "relatedLabel": "More Products",
     "relatedTitle": "You Might Also",
-    "relatedHighlight": "Like"
+    "relatedHighlight": "Like",
+    "uncategorized": "Uncategorized"
+  },
+  "catalogPage": {
+    "breadcrumb": "Home / Catalog",
+    "label": "Our Collection",
+    "title": "Product",
+    "highlight": "Catalog",
+    "subtitle": "Explore our full range of export-ready apparel. No prices shown - submit an inquiry for a custom wholesale quote."
+  },
+  "rfqPage": {
+    "label": "Request a Quote",
+    "title": "Get Your Custom",
+    "highlight": "Wholesale Quote",
+    "subtitle": "Fill in your requirements and we'll get back to you with a detailed quote within 24 hours. No commitment required.",
+    "statResponse": "24hr Response",
+    "statCommitment": "No Commitment",
+    "statMoq": "From 50 pcs"
+  },
+  "productDetail": {
+    "imageComingSoon": "Product Image Coming Soon",
+    "uncategorized": "Uncategorized",
+    "fabric": "Fabric",
+    "availableOnRequest": "Available on request",
+    "minOrder": "Min. Order",
+    "pieces": "pieces",
+    "contactUs": "Contact us",
+    "customizable": "Customizable",
+    "customizableYes": "Yes - Private label available",
+    "customizableNo": "Standard only",
+    "availableSizes": "Available Sizes",
+    "availableColors": "Available Colors",
+    "privateLabelAvailable": "Private Label Available",
+    "privateLabelDescription": "This product can be manufactured with your branding, custom labels, and packaging.",
+    "requestQuoteForProduct": "Request a Quote for This Product",
+    "qualityGuaranteed": "Quality Guaranteed",
+    "globalShipping": "Global Shipping",
+    "fastTurnaround": "Fast Turnaround"
   },
   "faq": {
     "label": "FAQ",

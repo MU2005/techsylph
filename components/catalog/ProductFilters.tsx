@@ -11,18 +11,16 @@ export type FilterState = {
   customizable: boolean;
 };
 
-const CATEGORY_OPTIONS = [
-  { value: "", key: "all" as const },
-  { value: "tshirts", key: "categoryTshirts" as const },
-  { value: "hoodies", key: "categoryHoodies" as const },
-  { value: "activewear", key: "categoryActivewear" as const },
-  { value: "custom", key: "categoryCustom" as const },
-] as const;
+type CategoryOption = {
+  slug: string;
+  title: string;
+};
 
 type ProductFiltersProps = {
   filters: FilterState;
   onFilterChange: (filters: FilterState) => void;
   totalCount: number;
+  categoryOptions: CategoryOption[];
 };
 
 const DEBOUNCE_MS = 300;
@@ -67,6 +65,7 @@ export default function ProductFilters({
   filters,
   onFilterChange,
   totalCount,
+  categoryOptions,
 }: ProductFiltersProps) {
   const t = useTranslations("catalog");
 
@@ -101,19 +100,31 @@ export default function ProductFilters({
 
       {/* Category pills */}
       <div className="flex flex-wrap gap-2">
-        {CATEGORY_OPTIONS.map(({ value, key }) => (
+        <button
+          type="button"
+          onClick={() => handleCategory("")}
+          className={cn(
+            "rounded-full px-4 py-2 font-body text-xs font-medium transition-all duration-200 cursor-pointer",
+            filters.category === ""
+              ? "gradient-bg text-white shadow-sm"
+              : "border border-surface-3 bg-white text-text-secondary hover:border-brand-green/40 hover:text-brand-green"
+          )}
+        >
+          {t("all")}
+        </button>
+        {categoryOptions.map(({ slug, title }) => (
           <button
-            key={value || "all"}
+            key={slug}
             type="button"
-            onClick={() => handleCategory(value)}
+            onClick={() => handleCategory(slug)}
             className={cn(
               "rounded-full px-4 py-2 font-body text-xs font-medium transition-all duration-200 cursor-pointer",
-              filters.category === value
+              filters.category === slug
                 ? "gradient-bg text-white shadow-sm"
                 : "border border-surface-3 bg-white text-text-secondary hover:border-brand-green/40 hover:text-brand-green"
             )}
           >
-            {t(key)}
+            {title}
           </button>
         ))}
       </div>

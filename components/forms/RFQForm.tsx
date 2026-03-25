@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Upload } from "lucide-react";
 import { rfqSchema, type RFQFormData } from "@/lib/validations";
+import { trackLeadSubmission } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const CATEGORY_OPTIONS = [
@@ -36,6 +37,8 @@ const CUSTOM_CATEGORY = "Custom / Private Label";
 export function RFQForm() {
   const t = useTranslations("rfq");
   const tCatalog = useTranslations("catalog");
+  const locale = useLocale();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -47,6 +50,7 @@ export function RFQForm() {
     register,
     handleSubmit,
     control,
+    reset,
     setValue,
     watch,
     formState: { errors },
@@ -102,8 +106,20 @@ export function RFQForm() {
         return;
       }
       setIsSuccess(true);
+      reset({
+        categories: [],
+        customization: undefined,
+        customLabelRequest: false,
+        attachment: undefined,
+      });
       setSelectedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
+      trackLeadSubmission({
+        formType: "rfq",
+        locale,
+        path: pathname,
+        partial: Boolean(json?.partial),
+      });
     } catch {
       setErrorMessage(t("networkError"));
     } finally {
@@ -312,7 +328,7 @@ export function RFQForm() {
           <label className={labelClass}>
             {t("attachmentLabel")}
             <span className="ml-1 font-body text-sm font-normal text-text-muted">
-              (optional — JPG, PNG, PDF, max 10MB)
+              {t("attachmentHint")}
             </span>
           </label>
           <div
@@ -329,7 +345,7 @@ export function RFQForm() {
           >
             <Upload className="mx-auto mb-2 size-8 text-text-muted" />
             <p className="font-body text-sm text-text-secondary">
-              {selectedFile ? selectedFile.name : "Click to upload or drag and drop"}
+              {selectedFile ? selectedFile.name : t("attachmentDropzone")}
             </p>
             {selectedFile && (
               <button
@@ -342,7 +358,7 @@ export function RFQForm() {
                 }}
                 className="mt-1 text-xs text-red-500 hover:underline"
               >
-                Remove
+                {t("attachmentRemove")}
               </button>
             )}
           </div>

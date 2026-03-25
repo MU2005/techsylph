@@ -8,8 +8,9 @@ import { Link } from "@/i18n/navigation";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with TechSylph. WhatsApp, email, or contact form. We respond within 24–48 hours to all inquiries.",
+    "Get in touch with TechSylph. WhatsApp, email, or contact form. We respond within 24 hours to all inquiries.",
 };
+export const revalidate = 3600;
 
 export default async function ContactPage() {
   const t = await getTranslations("contact");
@@ -17,6 +18,7 @@ export default async function ContactPage() {
     <div className="min-h-screen bg-surface-1">
       <header className="mx-auto max-w-7xl px-6 pt-32 pb-12">
         <SectionHeading
+          as="h1"
           label={t("label")}
           title={t("title")}
           highlight={t("highlight")}
@@ -34,7 +36,7 @@ export default async function ContactPage() {
 
           <aside className="lg:col-span-2">
             <h3 className="font-display text-xl font-bold text-text-primary">
-              Contact Information
+              {t("contactInfo")}
             </h3>
             <div className="mt-4 space-y-0">
               <div className="card-base flex items-start gap-4 p-5">
@@ -42,7 +44,7 @@ export default async function ContactPage() {
                   <Mail className="size-5" />
                 </div>
                 <div>
-                  <p className="font-body text-xs text-text-muted">Email Us</p>
+                  <p className="font-body text-xs text-text-muted">{t("emailUs")}</p>
                   <a
                     href="mailto:hello@techsylph.shop"
                     className="font-body text-brand-green hover:underline"
@@ -59,12 +61,12 @@ export default async function ContactPage() {
                   <MessageCircle className="size-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-body text-xs text-text-muted">WhatsApp</p>
+                  <p className="font-body text-xs text-text-muted">{t("whatsAppLabel")}</p>
                   <span className="font-body text-text-primary">
                     +92 300 123 4567
                   </span>
                   <p className="mt-0.5 font-body text-xs text-text-muted">
-                    Available Mon–Sat, 9am–6pm PKT
+                    {t("whatsAppHours")}
                   </p>
                 </div>
               </div>
@@ -73,12 +75,12 @@ export default async function ContactPage() {
                   <MapPin className="size-5" />
                 </div>
                 <div>
-                  <p className="font-body text-xs text-text-muted">Location</p>
+                  <p className="font-body text-xs text-text-muted">{t("locationLabel")}</p>
                   <span className="font-body text-text-primary">
                     Sialkot, Punjab, Pakistan
                   </span>
                   <p className="mt-0.5 font-body text-xs text-text-muted">
-                    Pakistan&apos;s textile manufacturing hub
+                    {t("locationSubtext")}
                   </p>
                 </div>
               </div>
@@ -88,39 +90,55 @@ export default async function ContactPage() {
                 </div>
                 <div>
                   <p className="font-body text-xs text-text-muted">
-                    Response Time
+                    {t("responseTimeLabel")}
                   </p>
                   <span className="font-body text-text-primary">
-                    Within 24–48 hours
+                    {t("responseTimeValue")}
                   </span>
                   <p className="mt-0.5 font-body text-xs text-text-muted">
-                    For all inquiries and quotes
+                    {t("responseTimeSubtext")}
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="mt-6 font-body text-xs uppercase tracking-wider text-text-muted">
-              Follow Us
+              {t("followUs")}
             </p>
             <div className="mt-3 flex gap-3">
-              <Link
-                href="#"
+              <a
+                href="https://www.instagram.com/techsylph"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="card-base flex size-10 items-center justify-center rounded-xl text-text-muted transition-colors hover:text-brand-green"
                 aria-label="Instagram"
               >
                 <Instagram className="size-5" />
-              </Link>
-              <Link
-                href="#"
+              </a>
+              <a
+                href="https://www.linkedin.com/company/techsylph"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="card-base flex size-10 items-center justify-center rounded-xl text-text-muted transition-colors hover:text-brand-green"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="size-5" />
-              </Link>
+              </a>
             </div>
           </aside>
         </div>
+        <section className="mt-10 card-base p-6">
+          <h2 className="font-display text-2xl font-bold text-text-primary">Helpful links before you reach out</h2>
+          <p className="mt-2 font-body text-sm text-text-secondary">
+            If you want faster quoting, review our process and submit your requirements directly.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-4 font-body text-sm">
+            <Link href="/rfq" className="text-brand-green hover:underline">Request a wholesale quote</Link>
+            <Link href="/how-it-works" className="text-brand-green hover:underline">See how ordering works</Link>
+            <Link href="/custom-label" className="text-brand-green hover:underline">Explore private label services</Link>
+            <Link href="/faq" className="text-brand-green hover:underline">Read common buyer FAQs</Link>
+          </div>
+        </section>
       </div>
     </div>
   );

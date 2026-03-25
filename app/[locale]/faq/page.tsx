@@ -3,18 +3,21 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { FAQAccordion } from "@/components/faq/FAQAccordion";
 import { client } from "@/sanity/lib/client";
 import { FAQ_QUERY } from "@/sanity/lib/queries";
+import JsonLd from "@/components/shared/JsonLd";
+import { Link } from "@/i18n/navigation";
 
 export const metadata: Metadata = {
   title: "FAQ — Common Questions",
   description:
     "Answers to common questions about ordering from TechSylph. MOQ, private label, shipping, samples, payment, and more.",
 };
+export const revalidate = 300;
 
 const FALLBACK_FAQS = [
   {
     question: "What is the minimum order quantity (MOQ)?",
     answer:
-      "Our standard MOQ is 50 pieces per style, per color. For private label orders, the MOQ is 100 pieces per style.",
+      "Our standard MOQ starts from 50 pieces per style. If you need advanced private label customization, we'll guide you on the best minimums for your exact requirement.",
   },
   {
     question: "Do you offer private label / custom branding?",
@@ -29,27 +32,27 @@ const FALLBACK_FAQS = [
   {
     question: "How long does production take?",
     answer:
-      "Standard production takes 3–4 weeks after sample approval and order confirmation. Private label may take 4–6 weeks.",
+      "Standard production takes 15–20 business days after sample approval and order confirmation. More complex customizations can take longer and we confirm timeline before you pay.",
   },
   {
     question: "Can I get a sample before placing a bulk order?",
     answer:
-      "Yes. We offer pre-production samples. Sample lead time is 3–5 business days. Sample costs are credited against your bulk order.",
+      "Yes. We offer pre-production samples. Sample lead time is usually 7–10 business days, and sample cost is reimbursed against your first bulk order.",
   },
   {
     question: "How do I get pricing?",
     answer:
-      "We don't display prices publicly as they depend on quantity, customization, and fabric. Submit an RFQ form and we'll send you a detailed quote within 48 hours.",
+      "We don't display prices publicly because pricing depends on quantity, customization, and fabric. Submit an RFQ and we'll send a detailed quote within 24 hours.",
   },
   {
     question: "What payment methods do you accept?",
     answer:
-      "We accept T/T (Bank Transfer), Western Union, and other methods. Payment terms: 30% advance, 70% before shipment.",
+      "We accept Payoneer and T/T (bank transfer). Standard payment terms are 50% advance and 50% before shipment.",
   },
   {
     question: "Are your products certified?",
     answer:
-      "We work to OEKO-TEX standards and can provide fabric certifications on request. GST-certified exporter.",
+      "We work to international quality standards and can provide relevant fabric/compliance documentation on request.",
   },
   {
     question: "Can I visit your factory?",
@@ -84,10 +87,25 @@ export default async function FaqPage({
     items = FALLBACK_FAQS;
   }
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={faqSchema} />
       <header className="mx-auto max-w-7xl px-6 pt-32 pb-12">
         <SectionHeading
+          as="h1"
           label="FAQ"
           title="Frequently Asked"
           highlight="Questions"
@@ -97,6 +115,15 @@ export default async function FaqPage({
 
       <div className="mx-auto max-w-3xl px-6 pb-20">
         <FAQAccordion items={items} locale={locale} />
+        <section className="mt-8 card-base p-6">
+          <h2 className="font-display text-2xl font-bold text-text-primary">Related resources for buyers</h2>
+          <div className="mt-4 flex flex-wrap gap-4 font-body text-sm">
+            <Link href="/custom-label" className="text-brand-green hover:underline">Private label manufacturing service</Link>
+            <Link href="/how-it-works" className="text-brand-green hover:underline">Ordering and production process</Link>
+            <Link href="/catalog" className="text-brand-green hover:underline">Browse export-ready catalog</Link>
+            <Link href="/rfq" className="text-brand-green hover:underline">Request your quote</Link>
+          </div>
+        </section>
       </div>
     </div>
   );
