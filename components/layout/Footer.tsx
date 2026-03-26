@@ -18,7 +18,6 @@ const FOOTER_LINKS = [
   { href: "/how-it-works", key: "howItWorks" as const },
   { href: "/why-us", key: "whyUs" as const },
   { href: "/about", key: "about" as const },
-  { href: "/blog", key: "blog" as const },
   { href: "/faq", key: "faq" as const },
   { href: "/rfq", key: "getQuote" as const },
 ] as const;

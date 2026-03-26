@@ -21,10 +21,11 @@ export function SectionHeading({
   as = "h2",
   className,
 }: SectionHeadingProps) {
+  const hasHighlight = Boolean(highlight);
+  const titleIncludesHighlight = hasHighlight && typeof highlight === "string" && title.includes(highlight);
+
   const titleParts =
-    highlight && title.includes(highlight)
-      ? title.split(highlight)
-      : [title];
+    titleIncludesHighlight ? title.split(highlight as string) : [title];
 
   const HeadingTag = as;
 
@@ -49,11 +50,15 @@ export function SectionHeading({
           light && "text-text-primary"
         )}
       >
-        {highlight && title.includes(highlight) ? (
+        {hasHighlight && titleIncludesHighlight ? (
           <>
             {titleParts[0]}
             <span className="gradient-text">{highlight}</span>
             {titleParts[1]}
+          </>
+        ) : hasHighlight ? (
+          <>
+            {title} <span className="gradient-text">{highlight}</span>
           </>
         ) : (
           title

@@ -18,6 +18,7 @@ interface FeaturedProductsProps {
 export default function FeaturedProducts({ products }: FeaturedProductsProps) {
   const t = useTranslations("featuredProducts");
   const tCatalog = useTranslations("catalog");
+  const tProductDetail = useTranslations("productDetail");
   const router = useRouter();
 
   return (
@@ -128,12 +129,12 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
                         ? `${tCatalog("moq")} ${product.moq} ${tCatalog("pcs")}`
                         : t("contactUs")}
                     </div>
-                    <div className="mt-auto flex flex-col gap-1.5 pt-2 sm:flex-row sm:gap-2 sm:pt-3">
+                    <div className="mt-auto grid grid-cols-1 gap-2 pt-2 sm:grid-cols-2 sm:gap-2 sm:pt-3">
                       <CTAButton
                         href="/rfq"
                         variant="primary"
                         size="sm"
-                        className="w-full rounded-lg px-2 py-1.5 text-[11px] sm:flex-1 sm:px-4 sm:py-2 sm:text-sm"
+                        className="w-full rounded-lg px-2 py-1.5 text-[11px] sm:px-4 sm:py-2 sm:text-sm"
                       >
                         {t("inquireNow")}
                       </CTAButton>
@@ -141,10 +142,24 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
                         href={productHref ?? "/catalog"}
                         variant="outline"
                         size="sm"
-                        className="w-full rounded-lg border-surface-3 px-2 py-1.5 text-[11px] sm:flex-1 sm:px-4 sm:py-2 sm:text-sm"
+                        className="w-full rounded-lg border-surface-3 px-2 py-1.5 text-[11px] sm:px-4 sm:py-2 sm:text-sm"
                       >
                         {t("viewDetails")}
                       </CTAButton>
+                      {productSlug ? (
+                        <CTAButton
+                          href={`/sample-request?product=${encodeURIComponent(
+                            product.name
+                          )}&slug=${encodeURIComponent(productSlug)}&productUrl=${encodeURIComponent(
+                            `/catalog/${productSlug}`
+                          )}`}
+                          variant="outline"
+                          size="sm"
+                          className="w-full rounded-lg border-surface-3 px-2 py-1.5 text-[11px] sm:col-span-2 sm:px-4 sm:py-2 sm:text-sm"
+                        >
+                          {tProductDetail("requestSample")}
+                        </CTAButton>
+                      ) : null}
                     </div>
                   </div>
                 </motion.div>

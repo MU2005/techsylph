@@ -10,6 +10,7 @@ import type { Product } from "@/types/sanity";
 
 export default function ProductCard({ product }: { product: Product }) {
   const tCatalog = useTranslations("catalog");
+  const tProductDetail = useTranslations("productDetail");
   const router = useRouter();
   const image = product.images?.[0];
   const imageUrl = image
@@ -125,6 +126,20 @@ export default function ProductCard({ product }: { product: Product }) {
             </button>
           )}
         </div>
+        {productSlug ? (
+          <CTAButton
+            href={`/sample-request?product=${encodeURIComponent(
+              product.name
+            )}&slug=${encodeURIComponent(productSlug)}&productUrl=${encodeURIComponent(
+              `/catalog/${productSlug}`
+            )}`}
+            variant="ghost"
+            size="sm"
+            className="mt-2 w-full rounded-lg px-2 py-1.5 text-[11px] sm:text-sm"
+          >
+            {tProductDetail("requestSample")}
+          </CTAButton>
+        ) : null}
       </div>
     </div>
   );

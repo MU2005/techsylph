@@ -103,7 +103,8 @@ export default async function WhyUsPage() {
             highlight="The Rest"
             centered
           />
-          <div className="card-base mt-12 overflow-hidden rounded-2xl">
+          {/* Desktop/tablet: keep the table layout */}
+          <div className="card-base mt-12 hidden overflow-hidden rounded-2xl sm:block">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-brand-green-light">
@@ -122,9 +123,7 @@ export default async function WhyUsPage() {
                 {COMPARISON_ROWS.map((row, i) => (
                   <tr
                     key={row.feature}
-                    className={
-                      i % 2 === 0 ? "bg-surface-1" : "bg-white"
-                    }
+                    className={i % 2 === 0 ? "bg-surface-1" : "bg-white"}
                   >
                     <td className="border-t border-surface-border px-6 py-4 font-body text-sm text-text-secondary">
                       {row.feature}
@@ -139,6 +138,43 @@ export default async function WhyUsPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile: stacked cards so nothing overflows */}
+          <div className="mt-6 space-y-3 sm:hidden">
+            {COMPARISON_ROWS.map((row, i) => (
+              <div
+                key={row.feature}
+                className={[
+                  "rounded-2xl border border-surface-3 px-4 py-3",
+                  i % 2 === 0 ? "bg-surface-1" : "bg-white",
+                ].join(" ")}
+              >
+                <p className="font-display text-sm font-semibold text-text-primary">
+                  {row.feature}
+                </p>
+
+                <div className="mt-2 space-y-1.5">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="font-display text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                      TechSylph
+                    </span>
+                    <span className="font-body text-sm font-semibold text-brand-green text-right">
+                      {row.techsylph}
+                    </span>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="font-display text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                      Typical Suppliers
+                    </span>
+                    <span className="font-body text-sm text-text-muted text-right">
+                      {row.typical}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

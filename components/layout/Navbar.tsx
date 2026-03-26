@@ -27,7 +27,6 @@ const NAV_LINKS = [
   { href: "/how-it-works", key: "howItWorks" as const },
   { href: "/why-us", key: "whyUs" as const },
   { href: "/about", key: "about" as const },
-  { href: "/blog", key: "blog" as const },
 ] as const;
 
 const LOCALES = [

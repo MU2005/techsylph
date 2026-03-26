@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { PackageSearch } from "lucide-react";
@@ -50,18 +50,11 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
 
   const [filters, setFilters] = useState<FilterState>(() => ({
     search: "",
-    category: "",
+    // Initialize from URL once on mount (avoid setState in effects).
+    category: resolvedCategoryFromUrl,
     customizable: false,
   }));
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    setFilters((prev) =>
-      prev.category === resolvedCategoryFromUrl
-        ? prev
-        : { ...prev, category: resolvedCategoryFromUrl }
-    );
-  }, [resolvedCategoryFromUrl]);
 
   const filtered = useMemo(() => {
     const normalizedSearch = filters.search.toLowerCase();
@@ -81,20 +74,11 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
   }, [products, filters]);
 
   const totalPages = Math.ceil(filtered.length / PRODUCTS_PER_PAGE);
+  const effectiveCurrentPage = totalPages > 0 ? Math.min(currentPage, totalPages) : 1;
   const paginatedProducts = useMemo(() => {
-    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const start = (effectiveCurrentPage - 1) * PRODUCTS_PER_PAGE;
     return filtered.slice(start, start + PRODUCTS_PER_PAGE);
-  }, [filtered, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters.search, filters.customizable, filters.category]);
-
-  useEffect(() => {
-    if (totalPages > 0 && currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  }, [filtered, effectiveCurrentPage]);
 
   const pageNumbers = useMemo(() => {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -104,7 +88,11 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
     <>
       <ProductFilters
         filters={filters}
-        onFilterChange={setFilters}
+        onFilterChange={(nextFilters) => {
+          // Reset pagination when filters change; keep state updates out of effects.
+          setCurrentPage(1);
+          setFilters(nextFilters);
+        }}
         totalCount={filtered.length}
         categoryOptions={categories.map((c) => ({ slug: c.slug, title: c.title }))}
       />
@@ -153,8 +141,10 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
             <nav className="flex w-full flex-wrap items-center justify-center gap-1.5 sm:gap-2" aria-label={t("paginationLabel")}>
               <button
                 type="button"
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.max(1, prev - 1))
+                }
+                disabled={effectiveCurrentPage === 1}
                 className="rounded-full border border-surface-3 bg-white px-3 py-1.5 font-body text-xs text-text-secondary transition-colors hover:border-brand-green/40 hover:text-brand-green disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
               >
                 {t("previous")}
@@ -165,9 +155,11 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
                   key={pageNumber}
                   type="button"
                   onClick={() => setCurrentPage(pageNumber)}
-                  aria-current={currentPage === pageNumber ? "page" : undefined}
+                  aria-current={
+                    effectiveCurrentPage === pageNumber ? "page" : undefined
+                  }
                   className={
-                    currentPage === pageNumber
+                    effectiveCurrentPage === pageNumber
                       ? "rounded-full gradient-bg px-3 py-1.5 font-body text-xs font-medium text-white shadow-sm sm:px-4 sm:py-2 sm:text-sm"
                       : "hidden rounded-full border border-surface-3 bg-white px-3 py-1.5 font-body text-xs text-text-secondary transition-colors hover:border-brand-green/40 hover:text-brand-green sm:inline-flex sm:px-4 sm:py-2 sm:text-sm"
                   }
@@ -177,13 +169,13 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
               ))}
 
               <span className="px-1 font-body text-xs text-text-muted sm:hidden">
-                {currentPage}/{totalPages}
+                {effectiveCurrentPage}/{totalPages}
               </span>
 
               <button
                 type="button"
                 onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
+                disabled={effectiveCurrentPage === totalPages}
                 className="rounded-full border border-surface-3 bg-white px-3 py-1.5 font-body text-xs text-text-secondary transition-colors hover:border-brand-green/40 hover:text-brand-green disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
               >
                 {t("next")}

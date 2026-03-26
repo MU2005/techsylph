@@ -85,38 +85,18 @@ export default async function HowItWorksPage() {
             <HowItWorksStepRow key={step.title} step={step} index={i} />
           ))}
         </div>
-        <section className="mt-10 rounded-3xl border border-brand-green/20 bg-gradient-to-br from-white to-brand-green/5 p-6 sm:p-8">
-          <div className="max-w-2xl">
-            <span className="inline-flex rounded-full bg-brand-green/10 px-3 py-1 font-display text-xs font-semibold uppercase tracking-wider text-brand-green">
-              Action Plan
-            </span>
-            <h2 className="mt-3 font-display text-2xl font-bold text-text-primary sm:text-3xl">Plan your next step</h2>
-            <p className="mt-2 font-body text-sm leading-relaxed text-text-secondary sm:text-base">
-              Follow this quick path to move from exploration to a ready-to-quote requirement.
-            </p>
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {NEXT_STEPS.map((item, index) => (
+        <section className="mt-10 card-base p-6">
+          <h2 className="font-display text-2xl font-bold text-text-primary">
+            Next steps for your order
+          </h2>
+          <div className="mt-4 flex flex-wrap gap-4 font-body text-sm">
+            {NEXT_STEPS.map((step) => (
               <Link
-                key={item.href}
-                href={item.href}
-                className="group rounded-2xl border border-brand-green/15 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-green/30 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"
+                key={step.href}
+                href={step.href}
+                className="text-brand-green hover:underline"
               >
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-green text-xs font-semibold text-white">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <h3 className="font-display text-base font-semibold text-text-primary transition-colors group-hover:text-brand-green">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1 font-body text-sm text-text-secondary">{item.helper}</p>
-                    <span className="mt-3 inline-flex items-center font-body text-sm font-medium text-brand-green">
-                      Open step
-                    </span>
-                  </div>
-                </div>
+                {step.title}
               </Link>
             ))}
           </div>
