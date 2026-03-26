@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Tag, ShieldCheck, Globe, PackageCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { CTAButton } from "@/components/shared/CTAButton";
+import { Link } from "@/i18n/navigation";
 import { urlFor } from "@/sanity/lib/image";
 import type { Product } from "@/types/sanity";
 
@@ -23,6 +24,14 @@ export default function ProductDetailContent({
   const mainImageUrl = mainImage
     ? urlFor(mainImage).width(800).url()
     : null;
+  const productNameParam = encodeURIComponent(product.name);
+  const productSlug = product.slug?.current ?? "";
+  const productSlugParam = encodeURIComponent(productSlug);
+  const productPath = productSlug ? `/catalog/${productSlug}` : "/catalog";
+  const productPathParam = encodeURIComponent(productPath);
+  const sampleInquiryHref = `/sample-request?product=${productNameParam}&slug=${productSlugParam}&productUrl=${productPathParam}`;
+  const quoteHref = `/rfq?product=${productNameParam}`;
+  const contactSalesHref = `/contact?type=sales&product=${productNameParam}`;
 
   return (
     <div className="grid grid-cols-1 gap-16 bg-white lg:grid-cols-2 lg:items-start">
@@ -187,23 +196,36 @@ export default function ProductDetailContent({
         )}
 
         {/* CTA buttons */}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <CTAButton
-            href="/rfq"
-            variant="primary"
-            size="lg"
-            className="w-full sm:flex-1"
-          >
-            {t("requestQuoteForProduct")}
-          </CTAButton>
-          <CTAButton
-            href="/contact"
-            variant="outline"
-            size="lg"
-            className="w-full sm:flex-1"
-          >
-            {t("contactUs")}
-          </CTAButton>
+        <div className="mt-8">
+          <p className="mb-3 font-body text-xs text-text-muted">
+            {t("sampleSupportNote")}
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <CTAButton
+              href={quoteHref}
+              variant="primary"
+              size="lg"
+              className="w-full sm:flex-1"
+            >
+              {t("requestQuote")}
+            </CTAButton>
+            <CTAButton
+              href={sampleInquiryHref}
+              variant="outline"
+              size="lg"
+              className="w-full sm:flex-1"
+            >
+              {t("requestSample")}
+            </CTAButton>
+          </div>
+          <div className="mt-3">
+            <Link
+              href={contactSalesHref}
+              className="font-body text-sm font-medium text-text-secondary underline-offset-2 transition-colors hover:text-brand-green hover:underline"
+            >
+              {t("contactSales")}
+            </Link>
+          </div>
         </div>
 
         {/* Trust row */}

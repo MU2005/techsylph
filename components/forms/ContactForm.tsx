@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
-import { contactSchema, type ContactFormData } from "@/lib/validations";
+import { createContactSchema, type ContactFormData, type ValidationMessages } from "@/lib/validations";
 import { trackLeadSubmission } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -16,11 +16,24 @@ const errorClass = "mt-1 font-body text-xs text-red-500";
 
 export function ContactForm() {
   const t = useTranslations("contact");
+  const tRfq = useTranslations("rfq");
   const locale = useLocale();
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const validationMessages: ValidationMessages = {
+    nameMin: tRfq("validation.nameMin"),
+    countryMin: tRfq("validation.countryMin"),
+    emailInvalid: tRfq("validation.emailInvalid"),
+    messageMin: tRfq("validation.messageMin"),
+    companyRequired: tRfq("validation.companyRequired"),
+    categoryMin: tRfq("validation.categoryMin"),
+    quantityRequired: tRfq("validation.quantityRequired"),
+    fileSize: tRfq("validation.fileSize"),
+    fileType: tRfq("validation.fileType"),
+  };
 
   const {
     register,
@@ -28,7 +41,7 @@ export function ContactForm() {
     reset,
     formState: { errors },
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(createContactSchema(validationMessages)),
   });
 
   async function onSubmit(data: ContactFormData) {
@@ -63,18 +76,20 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {isSuccess && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
-          <p className="font-body text-sm text-green-700">
-            ✓ {t("successMsg")}
-          </p>
-        </div>
-      )}
-      {errorMessage && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-          <p className="font-body text-sm text-red-700">{errorMessage}</p>
-        </div>
-      )}
+      <div aria-live="polite" aria-atomic="true">
+        {isSuccess && (
+          <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+            <p className="font-body text-sm text-green-700">
+              ✓ {t("successMsg")}
+            </p>
+          </div>
+        )}
+        {errorMessage && (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+            <p className="font-body text-sm text-red-700">{errorMessage}</p>
+          </div>
+        )}
+      </div>
 
       <div className="grid gap-6 md:grid-cols-2 md:gap-4">
         <div>

@@ -137,18 +137,27 @@
     "customLabelCheckbox": "This is a custom label / private label request",
     "attachmentHint": "(optional - JPG, PNG, PDF, max 10MB)",
     "attachmentDropzone": "Click to upload or drag and drop",
-    "attachmentRemove": "Remove"
+    "attachmentRemove": "Remove",
+    "validation": {
+      "nameMin": "Name must be at least 2 characters",
+      "countryMin": "Please enter your country",
+      "emailInvalid": "Please enter a valid email",
+      "messageMin": "Message must be at least 10 characters",
+      "companyRequired": "Company name is required",
+      "categoryMin": "Select at least one product category",
+      "quantityRequired": "Please provide an estimated quantity",
+      "fileSize": "File must be under 10MB",
+      "fileType": "Only JPG, PNG, WEBP, or PDF files allowed"
+    }
   },
   "footer": {
     "tagline": "From Sialkot to the World — Wearing Your Name.",
     "description": "Factory-direct private label apparel manufacturing with MOQ from 50 pieces and worldwide door-to-door delivery.",
-    "company": "Company",
-    "products": "Products",
+    "explore": "Explore",
     "contact": "Contact",
     "rights": "All rights reserved.",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "viewAllCatalog": "View All Catalog"
+    "terms": "Terms of Service"
   },
   "whatsapp": {
     "tooltip": "Chat on WhatsApp",
@@ -180,7 +189,10 @@
     "relatedLabel": "More Products",
     "relatedTitle": "You Might Also",
     "relatedHighlight": "Like",
-    "uncategorized": "Uncategorized"
+    "uncategorized": "Uncategorized",
+    "paginationLabel": "Catalog pagination",
+    "previous": "Previous",
+    "next": "Next"
   },
   "catalogPage": {
     "breadcrumb": "Home / Catalog",
@@ -214,9 +226,68 @@
     "privateLabelAvailable": "Private Label Available",
     "privateLabelDescription": "This product can be manufactured with your branding, custom labels, and packaging.",
     "requestQuoteForProduct": "Request a Quote for This Product",
+    "requestQuote": "Request Quote (Bulk Order)",
+    "requestSample": "Request Sample",
+    "contactSales": "Talk to Sales",
+    "sampleSupportNote": "Sample pricing, availability, and shipping details are shared after your request.",
     "qualityGuaranteed": "Quality Guaranteed",
     "globalShipping": "Global Shipping",
     "fastTurnaround": "Fast Turnaround"
+  },
+  "sampleRequest": {
+    "label": "Request Sample",
+    "title": "Order a Product",
+    "highlight": "Sample",
+    "subtitle": "Confirm your sample needs and our team will share pricing, availability, and shipping details.",
+    "productSummaryLabel": "Selected product",
+    "viewProduct": "View product page",
+    "unknownProduct": "Selected Product",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Your full name",
+    "companyLabel": "Company Name",
+    "companyPlaceholder": "Your company name",
+    "countryLabel": "Country",
+    "countryPlaceholder": "e.g. United States",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your@email.com",
+    "phoneLabel": "Phone Number (optional)",
+    "phonePlaceholder": "+1 234 567 8900",
+    "quantityLabel": "Sample Quantity",
+    "sizePreferenceLabel": "Size Preference (optional)",
+    "sizePreferencePlaceholder": "e.g. M and L",
+    "colorPreferenceLabel": "Color Preference (optional)",
+    "colorPreferencePlaceholder": "e.g. Black, Navy",
+    "customizationLabel": "Customization needed?",
+    "customizationNo": "No customization",
+    "customizationLogoPrint": "Logo print",
+    "customizationEmbroidery": "Embroidery",
+    "customizationLabelsPackaging": "Labels / Packaging",
+    "customizationNotSure": "Not sure",
+    "customizationNotesLabel": "Custom request details (optional)",
+    "customizationNotesPlaceholder": "If you need something unique, describe it here.",
+    "attachmentLabel": "Upload Reference Image or Brief",
+    "attachmentHint": "(optional - JPG, PNG, PDF, max 10MB)",
+    "attachmentDropzone": "Click to upload or drag and drop",
+    "attachmentRemove": "Remove",
+    "messageLabel": "Sample Requirements",
+    "messagePlaceholder": "Tell us your sample requirements, branding, or timeline.",
+    "defaultMessage": "I would like to request a sample for {product}.",
+    "submit": "Submit Sample Request",
+    "submitting": "Submitting...",
+    "submitted": "Sample Request Submitted! ✓",
+    "successMsg": "Sample request submitted successfully! We'll reply within 24 hours.",
+    "errorMsg": "Something went wrong. Please try again.",
+    "networkError": "Network error. Please try again.",
+    "validation": {
+      "nameMin": "Name must be at least 2 characters",
+      "companyRequired": "Company name is required",
+      "countryMin": "Please enter your country",
+      "emailInvalid": "Please enter a valid email",
+      "quantityRequired": "Please select sample quantity",
+      "messageMin": "Message must be at least 10 characters",
+      "fileSize": "File must be under 10MB",
+      "fileType": "Only JPG, PNG, WEBP, or PDF files allowed"
+    }
   },
   "faq": {
     "label": "FAQ",
@@ -234,6 +305,10 @@
     "pageLabel": "Blog",
     "pageTitle": "Apparel Industry",
     "pageHighlight": "Insights",
-    "pageSubtitle": "Guides, manufacturing insights, and industry news from Pakistan."
+    "pageSubtitle": "Guides, manufacturing insights, and industry news from Pakistan.",
+    "ctaTitle": "Ready to source your next collection?",
+    "ctaSubtitle": "Get factory-direct pricing with low MOQ and full customization options.",
+    "ctaQuote": "Request a Quote",
+    "ctaCatalog": "Browse Catalog"
   }
 }

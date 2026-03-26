@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import { Upload } from "lucide-react";
-import { rfqSchema, type RFQFormData } from "@/lib/validations";
+import { createRfqSchema, type RFQFormData, type ValidationMessages } from "@/lib/validations";
 import { trackLeadSubmission } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +46,18 @@ export function RFQForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const validationMessages: ValidationMessages = {
+    nameMin: t("validation.nameMin"),
+    countryMin: t("validation.countryMin"),
+    emailInvalid: t("validation.emailInvalid"),
+    messageMin: t("validation.messageMin"),
+    companyRequired: t("validation.companyRequired"),
+    categoryMin: t("validation.categoryMin"),
+    quantityRequired: t("validation.quantityRequired"),
+    fileSize: t("validation.fileSize"),
+    fileType: t("validation.fileType"),
+  };
+
   const {
     register,
     handleSubmit,
@@ -55,7 +67,7 @@ export function RFQForm() {
     watch,
     formState: { errors },
   } = useForm<RFQFormData>({
-    resolver: zodResolver(rfqSchema),
+    resolver: zodResolver(createRfqSchema(validationMessages)),
     defaultValues: {
       categories: [],
       customization: undefined,
@@ -129,18 +141,20 @@ export function RFQForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {isSuccess && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
-          <p className="font-body text-sm text-green-700">
-            ✓ {t("successMsg")}
-          </p>
-        </div>
-      )}
-      {errorMessage && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-          <p className="font-body text-sm text-red-700">{errorMessage}</p>
-        </div>
-      )}
+      <div aria-live="polite" aria-atomic="true">
+        {isSuccess && (
+          <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+            <p className="font-body text-sm text-green-700">
+              ✓ {t("successMsg")}
+            </p>
+          </div>
+        )}
+        {errorMessage && (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+            <p className="font-body text-sm text-red-700">{errorMessage}</p>
+          </div>
+        )}
+      </div>
 
       <div className="grid gap-6 md:grid-cols-2 md:gap-4">
         <div>
@@ -233,6 +247,7 @@ export function RFQForm() {
                   <button
                     key={opt}
                     type="button"
+                    aria-pressed={checked}
                     onClick={() => {
                       const next = checked
                         ? field.value.filter((x) => x !== opt)
@@ -292,6 +307,7 @@ export function RFQForm() {
                   <button
                     key={value}
                     type="button"
+                    aria-pressed={selected}
                     onClick={() => field.onChange(value)}
                     className={cn(
                       pillBase,

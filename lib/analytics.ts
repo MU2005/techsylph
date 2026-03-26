@@ -1,4 +1,4 @@
-type LeadFormType = "contact" | "rfq";
+type LeadFormType = "contact" | "rfq" | "sample-request";
 
 type LeadEventPayload = {
   formType: LeadFormType;

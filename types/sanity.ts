@@ -114,12 +114,18 @@ export interface Inquiry {
   email?: string;
   phone?: string;
   message?: string;
-  type?: "contact" | "rfq";
+  type?: "contact" | "rfq" | "sample-request";
   status?: "new" | "in-progress" | "resolved";
   products?: string[];
   quantity?: string;
   hasAttachment?: boolean;
   attachmentName?: string;
   customLabelRequest?: boolean;
+  productSlug?: string;
+  productUrl?: string;
+  sampleCustomization?: string;
+  sampleCustomizationNotes?: string;
+  sampleSizePreference?: string;
+  sampleColorPreference?: string;
   _createdAt?: string;
 }

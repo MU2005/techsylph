@@ -11,9 +11,11 @@ export const metadata: Metadata = {
 };
 export const revalidate = 3600;
 
+const currentYear = new Date().getFullYear();
+
 const PILLS = [
   "📄 PDF Format",
-  "🔄 Updated 2024",
+  `🔄 Updated ${currentYear}`,
   "📦 All Categories",
   "💼 B2B Pricing Guide",
 ];
@@ -36,7 +38,7 @@ export default async function LookbookPage() {
         <div className="card-base rounded-2xl p-10">
           <FileDown className="mx-auto size-16 text-brand-green" />
           <h2 className="mt-4 font-display text-2xl font-bold text-text-primary">
-            TechSylph Product Catalog 2024
+            TechSylph Product Catalog {currentYear}
           </h2>
           <p className="mt-2 font-body text-sm text-text-secondary">
             Complete collection — Apparel, Activewear & Private Label
@@ -56,7 +58,7 @@ export default async function LookbookPage() {
               href="/lookbook.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-xl border-0 px-8 py-4 font-body font-semibold text-white shadow-sm transition-all duration-200 gradient-bg hover:opacity-90"
+              className="inline-flex items-center justify-center rounded-xl border-0 px-8 py-4 font-body font-semibold text-white shadow-sm transition-all duration-200 gradient-bg hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2"
             >
               <Download className="mr-2 size-5" />
               Download Free Catalog

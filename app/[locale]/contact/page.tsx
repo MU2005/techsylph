@@ -4,6 +4,7 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Mail, MessageCircle, MapPin, Clock, Instagram, Linkedin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { CONTACT_EMAIL, CONTACT_MAILTO } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -14,6 +15,7 @@ export const revalidate = 3600;
 
 export default async function ContactPage() {
   const t = await getTranslations("contact");
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "+923001234567";
   return (
     <div className="min-h-screen bg-surface-1">
       <header className="mx-auto max-w-7xl px-6 pt-32 pb-12">
@@ -46,10 +48,10 @@ export default async function ContactPage() {
                 <div>
                   <p className="font-body text-xs text-text-muted">{t("emailUs")}</p>
                   <a
-                    href="mailto:hello@techsylph.shop"
+                    href={CONTACT_MAILTO}
                     className="font-body text-brand-green hover:underline"
                   >
-                    hello@techsylph.shop
+                    {CONTACT_EMAIL}
                   </a>
                 </div>
               </div>
@@ -62,9 +64,14 @@ export default async function ContactPage() {
                 </div>
                 <div>
                   <p className="font-body text-xs text-text-muted">{t("whatsAppLabel")}</p>
-                  <span className="font-body text-text-primary">
-                    +92 300 123 4567
-                  </span>
+                  <a
+                    href={`https://wa.me/${whatsappNumber.replace(/\s/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-body text-text-primary hover:text-brand-green transition-colors"
+                  >
+                    {whatsappNumber}
+                  </a>
                   <p className="mt-0.5 font-body text-xs text-text-muted">
                     {t("whatsAppHours")}
                   </p>
@@ -107,7 +114,7 @@ export default async function ContactPage() {
             </p>
             <div className="mt-3 flex gap-3">
               <a
-                href="https://www.instagram.com/techsylph"
+                href="https://www.instagram.com/techsylph/?hl=en"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="card-base flex size-10 items-center justify-center rounded-xl text-text-muted transition-colors hover:text-brand-green"
@@ -116,7 +123,7 @@ export default async function ContactPage() {
                 <Instagram className="size-5" />
               </a>
               <a
-                href="https://www.linkedin.com/company/techsylph"
+                href="https://www.linkedin.com/in/tech-sylph-b744823b8/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="card-base flex size-10 items-center justify-center rounded-xl text-text-muted transition-colors hover:text-brand-green"

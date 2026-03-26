@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
@@ -153,6 +154,7 @@ export default function Navbar() {
               className="border-surface-3 bg-white px-6 pt-6 pb-8 data-[side=top]:max-h-[85vh] data-[side=top]:overflow-y-auto"
               showCloseButton
             >
+              <SheetTitle className="sr-only">Navigation menu</SheetTitle>
               <nav className="flex flex-col gap-0.5 pt-10">
                 {NAV_LINKS.map(({ href, key }) => (
                   <Link

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Link } from "@/i18n/navigation";
+import { CONTACT_EMAIL, CONTACT_MAILTO } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -34,8 +35,8 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             If you want your inquiry data removed, contact us at{" "}
-            <a href="mailto:hello@techsylph.shop" className="text-brand-green hover:underline">
-              hello@techsylph.shop
+            <a href={CONTACT_MAILTO} className="text-brand-green hover:underline">
+              {CONTACT_EMAIL}
             </a>.
           </p>
           <div className="border-t border-surface-3 pt-4">

@@ -4,15 +4,16 @@
  *
  * Run:  npm run test:resend
  *
- * Note: With from "onboarding@resend.dev", Resend only allows sending TO the
- * email address of your Resend account. Set ADMIN_EMAIL in .env.local to
- * that address (e.g. the one you signed up with) to receive the test.
- * To send to any address, verify a domain at resend.com/domains and set RESEND_FROM.
+ * Keep CONTACT_EMAIL / DEFAULT_RESEND_FROM in sync with `lib/contact.ts`.
+ * Resend may require verifying the sender domain or address in the Resend dashboard.
  */
 
 import { readFileSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+
+const CONTACT_EMAIL = "techsylph.co@gmail.com";
+const DEFAULT_RESEND_FROM = `TechSylph <${CONTACT_EMAIL}>`;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -37,7 +38,8 @@ if (existsSync(envPath)) {
 }
 
 const apiKey = process.env.RESEND_API_KEY;
-const toEmail = process.env.ADMIN_EMAIL || "hello@techsylph.shop";
+const toEmail = process.env.ADMIN_EMAIL || CONTACT_EMAIL;
+const fromEmail = process.env.RESEND_FROM || DEFAULT_RESEND_FROM;
 
 if (!apiKey) {
   console.error("[test-resend] RESEND_API_KEY is not set. Add it to .env.local and try again.");
@@ -45,13 +47,13 @@ if (!apiKey) {
 }
 
 console.log("[test-resend] Sending test email to:", toEmail);
-console.log("[test-resend] From: TechSylph <onboarding@resend.dev>");
+console.log("[test-resend] From:", fromEmail);
 
 const { Resend } = await import("resend");
 const resend = new Resend(apiKey);
 
 const { data, error } = await resend.emails.send({
-  from: "TechSylph <onboarding@resend.dev>",
+  from: fromEmail,
   to: toEmail,
   subject: "TechSylph — Resend test",
   html: `
@@ -63,7 +65,6 @@ const { data, error } = await resend.emails.send({
 
 if (error) {
   console.error("[test-resend] Resend error:", error);
-  console.error("[test-resend] Tip: Using onboarding@resend.dev you can only send to your Resend account email. Set ADMIN_EMAIL to that address in .env.local.");
   process.exitCode = 1;
   process.exit(1);
 }

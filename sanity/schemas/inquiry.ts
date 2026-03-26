@@ -18,6 +18,7 @@ export default defineType({
         list: [
           { title: "General Contact", value: "contact" },
           { title: "Request for Quote", value: "rfq" },
+          { title: "Sample Request", value: "sample-request" },
         ],
       },
     }),
@@ -58,6 +59,37 @@ export default defineType({
       name: "customLabelRequest",
       title: "Custom Label Request",
       type: "boolean",
+    }),
+    defineField({
+      name: "productSlug",
+      title: "Product Slug",
+      type: "string",
+    }),
+    defineField({
+      name: "productUrl",
+      title: "Product URL",
+      type: "url",
+    }),
+    defineField({
+      name: "sampleCustomization",
+      title: "Sample Customization",
+      type: "string",
+    }),
+    defineField({
+      name: "sampleCustomizationNotes",
+      title: "Sample Customization Notes",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
+      name: "sampleSizePreference",
+      title: "Sample Size Preference",
+      type: "string",
+    }),
+    defineField({
+      name: "sampleColorPreference",
+      title: "Sample Color Preference",
+      type: "string",
     }),
   ],
   preview: {

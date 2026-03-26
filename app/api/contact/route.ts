@@ -4,11 +4,11 @@ import { contactSchema, type ContactFormData } from "@/lib/validations";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { reportApiError } from "@/lib/monitoring";
 import { writeClient } from "@/sanity/lib/writeClient";
+import { CONTACT_EMAIL, DEFAULT_RESEND_FROM } from "@/lib/contact";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@techsylph.shop";
-const FROM_EMAIL =
-  process.env.RESEND_FROM || "TechSylph <onboarding@resend.dev>";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || CONTACT_EMAIL;
+const FROM_EMAIL = process.env.RESEND_FROM || DEFAULT_RESEND_FROM;
 
 function contactEmailHtml(data: ContactFormData): string {
   return `

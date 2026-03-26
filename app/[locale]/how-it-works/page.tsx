@@ -43,6 +43,29 @@ const STEPS = [
   },
 ];
 
+const NEXT_STEPS = [
+  {
+    title: "Browse catalog by product type",
+    href: "/catalog",
+    helper: "Compare categories and shortlist styles for your order.",
+  },
+  {
+    title: "See private label customization options",
+    href: "/custom-label",
+    helper: "Review branding, labels, packaging, and finishing choices.",
+  },
+  {
+    title: "Review MOQ, sample, and shipping FAQs",
+    href: "/faq",
+    helper: "Get quick clarity on minimums, lead times, and logistics.",
+  },
+  {
+    title: "Talk to our sourcing team",
+    href: "/contact",
+    helper: "Share your requirement and get guidance before you submit an RFQ.",
+  },
+];
+
 export default async function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-white">
@@ -62,15 +85,42 @@ export default async function HowItWorksPage() {
             <HowItWorksStepRow key={step.title} step={step} index={i} />
           ))}
         </div>
-        <div className="mt-8 card-base p-6">
-          <h2 className="font-display text-2xl font-bold text-text-primary">Plan your next step</h2>
-          <div className="mt-4 flex flex-wrap gap-4 font-body text-sm">
-            <Link href="/catalog" className="text-brand-green hover:underline">Browse catalog by product type</Link>
-            <Link href="/custom-label" className="text-brand-green hover:underline">See private label customization options</Link>
-            <Link href="/faq" className="text-brand-green hover:underline">Review MOQ, sample, and shipping FAQs</Link>
-            <Link href="/contact" className="text-brand-green hover:underline">Talk to our sourcing team</Link>
+        <section className="mt-10 rounded-3xl border border-brand-green/20 bg-gradient-to-br from-white to-brand-green/5 p-6 sm:p-8">
+          <div className="max-w-2xl">
+            <span className="inline-flex rounded-full bg-brand-green/10 px-3 py-1 font-display text-xs font-semibold uppercase tracking-wider text-brand-green">
+              Action Plan
+            </span>
+            <h2 className="mt-3 font-display text-2xl font-bold text-text-primary sm:text-3xl">Plan your next step</h2>
+            <p className="mt-2 font-body text-sm leading-relaxed text-text-secondary sm:text-base">
+              Follow this quick path to move from exploration to a ready-to-quote requirement.
+            </p>
           </div>
-        </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {NEXT_STEPS.map((item, index) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group rounded-2xl border border-brand-green/15 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-green/30 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-green text-xs font-semibold text-white">
+                    {index + 1}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-base font-semibold text-text-primary transition-colors group-hover:text-brand-green">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 font-body text-sm text-text-secondary">{item.helper}</p>
+                    <span className="mt-3 inline-flex items-center font-body text-sm font-medium text-brand-green">
+                      Open step
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
 
       <section className="px-6 py-20">

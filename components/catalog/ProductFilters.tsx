@@ -41,6 +41,9 @@ function SearchInputWithDebounce({
   const [searchInput, setSearchInput] = useState(initialSearch);
   const filtersRef = useRef(filters);
   useEffect(() => {
+    setSearchInput(initialSearch);
+  }, [initialSearch]);
+  useEffect(() => {
     filtersRef.current = filters;
   }, [filters]);
   useEffect(() => {
@@ -89,7 +92,6 @@ export default function ProductFilters({
       <div className="relative w-full md:w-72">
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
         <SearchInputWithDebounce
-          key={filters.search}
           initialSearch={filters.search}
           filters={filters}
           onFilterChange={onFilterChange}

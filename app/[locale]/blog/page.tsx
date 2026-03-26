@@ -5,6 +5,7 @@ import { client } from "@/sanity/lib/client";
 import { BLOG_POSTS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { CTAButton } from "@/components/shared/CTAButton";
 import { Link } from "@/i18n/navigation";
 import type { BlogPost } from "@/types/sanity";
 
@@ -96,6 +97,19 @@ export default async function BlogPage() {
             })}
           </div>
         )}
+
+        <div className="mt-16 rounded-2xl border border-surface-3 bg-surface-1 p-8 text-center">
+          <p className="font-display text-xl font-bold text-text-primary">
+            {t("ctaTitle")}
+          </p>
+          <p className="mx-auto mt-2 max-w-md font-body text-sm text-text-secondary">
+            {t("ctaSubtitle")}
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+            <CTAButton href="/rfq" size="md">{t("ctaQuote")}</CTAButton>
+            <CTAButton href="/catalog" variant="outline" size="md">{t("ctaCatalog")}</CTAButton>
+          </div>
+        </div>
       </div>
     </div>
   );

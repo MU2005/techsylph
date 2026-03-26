@@ -109,7 +109,7 @@ export default function FeaturedCategories({
           subtitle={tCategories("subtitle")}
           centered
         />
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {list.map((cat, i) => {
             const Icon = ICON_MAP[cat.icon ?? "Shirt"] ?? Shirt;
             const colorClass = COLOR_MAP[cat.color ?? "emerald"] ?? "text-emerald-500";
@@ -134,31 +134,37 @@ export default function FeaturedCategories({
                 whileHover={{ y: -4 }}
               >
                 <Link
-                  href={`/catalog?category=${cat.slug}`}
-                  className="card-base group flex flex-col gap-4 p-6"
+                  href={{
+                    pathname: "/catalog",
+                    query: {
+                      ...(cat.slug ? { category: cat.slug } : {}),
+                      ...(cat.title ? { categoryTitle: cat.title } : {}),
+                    },
+                  }}
+                  className="group flex h-full flex-col gap-3 rounded-2xl p-2 sm:gap-4 sm:p-4"
                 >
                   {imageUrl ? (
-                    <div className="-mx-6 -mt-6 mb-4 w-[calc(100%+3rem)] aspect-video overflow-hidden rounded-t-xl relative">
+                    <div className="relative mx-auto mb-2 aspect-square w-24 overflow-hidden rounded-full border border-surface-3 sm:mb-3 sm:w-32">
                       <Image
                         src={imageUrl}
                         alt={cat.title}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        sizes="(max-width: 640px) 40vw, (max-width: 1024px) 25vw, 12vw"
                       />
                     </div>
                   ) : (
-                    <div className={`icon-box ${bgClass}`}>
-                      <Icon className={`size-6 ${colorClass}`} />
+                    <div className={`mx-auto flex size-24 items-center justify-center rounded-full ${bgClass} sm:size-32`}>
+                      <Icon className={`size-6 sm:size-8 ${colorClass}`} />
                     </div>
                   )}
-                  <h3 className="font-display text-lg font-semibold text-text-primary">
+                  <h3 className="text-center font-display text-sm font-semibold text-text-primary sm:text-lg">
                     {cat.title}
                   </h3>
-                  <p className="font-body text-sm leading-relaxed text-text-secondary">
+                  <p className="text-center font-body text-xs leading-relaxed text-text-secondary sm:text-sm">
                     {cat.description ?? ""}
                   </p>
-                  <span className="mt-auto font-body text-sm font-semibold text-brand-green hover:underline">
+                  <span className="mt-auto text-center font-body text-xs font-semibold text-brand-green hover:underline sm:text-sm">
                     {tCategories("explore")}
                   </span>
                 </Link>

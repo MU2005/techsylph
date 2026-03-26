@@ -465,7 +465,7 @@ RESEND_API_KEY=
 NEXT_PUBLIC_WHATSAPP_NUMBER=+92XXXXXXXXXX
 
 # Admin contact email
-ADMIN_EMAIL=hello@techsylph.shop
+ADMIN_EMAIL=techsylph.co@gmail.com
 ```
 
 ---

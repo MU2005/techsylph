@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Search, FileText, PackageCheck } from "lucide-react";
 import { SectionHeading } from "@/components/shared/SectionHeading";
@@ -32,23 +32,25 @@ const ROTATE_INTERVAL_MS = 2800;
 export default function HowItWorksMini() {
   const t = useTranslations("howItWorks");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReducedMotion || paused) return;
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % STEPS.length);
     }, ROTATE_INTERVAL_MS);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, []);
+  }, [prefersReducedMotion, paused]);
 
   const handleDotClick = (i: number) => {
     setActiveIndex(i);
+    setPaused(true);
     if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % STEPS.length);
-    }, ROTATE_INTERVAL_MS);
+    setTimeout(() => setPaused(false), ROTATE_INTERVAL_MS * 2);
   };
 
   const step = STEPS[activeIndex];
@@ -129,17 +131,21 @@ export default function HowItWorksMini() {
               </motion.div>
             </AnimatePresence>
           </div>
-          <div className="mt-6 flex justify-center gap-2" aria-hidden>
+          <div className="mt-6 flex justify-center gap-2" role="tablist" aria-label="Steps">
             {STEPS.map((_, i) => (
               <button
                 key={i}
                 type="button"
+                role="tab"
+                aria-selected={i === activeIndex}
                 onClick={() => handleDotClick(i)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === activeIndex ? "w-6 bg-emerald-600" : "w-2 bg-surface-3 hover:bg-emerald-200"
-                }`}
+                className={`h-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full transition-all duration-300`}
                 aria-label={`Go to step ${i + 1}`}
-              />
+              >
+                <span className={`block h-2 rounded-full transition-all duration-300 ${
+                  i === activeIndex ? "w-6 bg-emerald-600" : "w-2 bg-surface-3 hover:bg-emerald-200"
+                }`} />
+              </button>
             ))}
           </div>
         </div>
