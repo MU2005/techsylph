@@ -20,9 +20,16 @@ export const metadata: Metadata = {
   title: "TechSylph",
   description: "TechSylph",
   icons: {
-    icon: "/logo-ts-removebg-preview.png",
-    shortcut: "/logo-ts-removebg-preview.png",
-    apple: "/logo-ts-removebg-preview.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "32x35", type: "image/png" },
+      {
+        url: "/logo-ts-removebg-preview.png",
+        type: "image/png",
+        sizes: "any",
+      },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
 };
 
